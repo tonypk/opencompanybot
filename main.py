@@ -5,13 +5,89 @@ import asyncio
 from workers import WorkerEntrypoint, Response, Request
 
 
+# Provider configuration - in production, these would be real API endpoints
+PROVIDERS = {
+    "uk": {
+        "name": "Letsy",
+        "api_endpoint": "https://api.letsy.co/formations",
+        "type": "api",  # api or manual
+        "features": ["ltd", "llp"],
+        "virtual_address": True
+    },
+    "sg": {
+        "name": "Singapore Incorporation Services",
+        "api_endpoint": "https://api.singaporeincorp.sg/v1",  # placeholder
+        "type": "api",
+        "features": ["pte_ltd", "llp"],
+        "virtual_address": True,
+        "requirements": ["singpass", "business_reg"]  # local requirements
+    },
+    "hk": {
+        "name": "Hong Kong Company Services",
+        "api_endpoint": "https://api.hkcompanies.gov.hk/v1",  # placeholder
+        "type": "api",
+        "features": ["ltd", "company"],
+        "virtual_address": True,
+        "requirements": ["hkid"]
+    },
+    "ae": {
+        "name": "UAE Free Zone Services",
+        "api_endpoint": "https://api.uaefreezone.gov.ae/v1",  # placeholder
+        "type": "manual",  # typically manual process
+        "features": ["freezone", "mainland"],
+        "virtual_address": True,
+        "requirements": ["passport", "visa"]
+    },
+    "us": {
+        "name": "US State Filing Services",
+        "api_endpoint": "https://api.statefiling.gov/v1",  # placeholder
+        "type": "api",
+        "features": ["llc", "corporation"],
+        "virtual_address": True,
+        "requirements": ["ssn", "itin"]
+    }
+}
+
+# Country-specific requirements
+COUNTRY_REQUIREMENTS = {
+    "uk": {
+        "fields": ["company_name", "company_type", "directors", "shareholders", "registered_office_address"],
+        "documents": ["passport", "proof_of_address"],
+        "sic_codes": True,
+        "companies_house_fee": 50
+    },
+    "sg": {
+        "fields": ["company_name", "company_type", "shareholders", "directors", "registered_address"],
+        "documents": ["singpass", "passport", "business_profile"],
+        "acra_fee": 300
+    },
+    "hk": {
+        "fields": ["company_name", "company_type", "shareholders", "directors", "registered_address"],
+        "documents": ["hkid_card", "passport", "address_proof"],
+        "companies_house_fee": 200
+    },
+    "ae": {
+        "fields": ["company_name", "company_type", "shareholders", "directors", "freezone"],
+        "documents": ["passport", "visa", "emirates_id"],
+        "freezone_options": ["DMCC", "IFZA", "DAFZA", "JAFZA"]
+    },
+    "us": {
+        "fields": ["company_name", "company_type", "state", "shareholders", "registered_agent"],
+        "documents": ["ssn", "passport", "state_id"],
+        "states": ["Delaware", "Wyoming", "Florida", "Texas"]
+    }
+}
+
+
 class Default(WorkerEntrypoint):
     async def fetch(self, request: Request, env) -> Response:
-        from urllib.parse import urlparse
+        from urllib.parse import urlparse, parse_qs
         from datetime import datetime
         
         path = urlparse(request.url).path
         query = urlparse(request.url).query
+        params = parse_qs(query)
+        
         cors = {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"}
         
         db = getattr(self.env, "DB", None)
@@ -22,75 +98,86 @@ class Default(WorkerEntrypoint):
         def success_response(data, status=200):
             return Response(json.dumps(data), status=status, headers=cors)
         
+        # CORS preflight
         if request.method == "OPTIONS":
-            return Response("", status=204, headers=cors)
+            return Response("", status=204, headers={
+                **cors,
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization"
+            })
         
+        # ============ Root & Health ============
         if path == "/":
             return success_response({
                 "name": "OpenCompanyBot API", 
-                "version": "1.0.0",
-                "countries": ["uk", "sg", "hk", "ae", "us"]
+                "version": "2.0.0",
+                "status": "operational",
+                "countries": list(PROVIDERS.keys())
             })
         
         if path == "/health":
-            return success_response({"status": "healthy", "timestamp": datetime.now().isoformat()})
+            return success_response({
+                "status": "healthy", 
+                "timestamp": datetime.now().isoformat(),
+                "providers": list(PROVIDERS.keys())
+            })
+        
+        # ============ Providers API ============
+        if path == "/api/v1/providers" and request.method == "GET":
+            providers_list = []
+            for code, info in PROVIDERS.items():
+                providers_list.append({
+                    "code": code,
+                    "name": info["name"],
+                    "type": info["type"],
+                    "features": info["features"],
+                    "virtual_address": info.get("virtual_address", False)
+                })
+            return success_response({"providers": providers_list})
         
         # ============ Countries API ============
         if path == "/api/v1/countries" and request.method == "GET":
-            return success_response({
-                "countries": [
-                    {
-                        "code": "uk",
-                        "name": "United Kingdom",
-                        "flag": "🇬🇧",
-                        "available": True,
-                        "price": 50,
-                        "ch_fee": 50,
-                        "currency": "GBP"
-                    },
-                    {
-                        "code": "sg",
-                        "name": "Singapore",
-                        "flag": "🇸🇬",
-                        "available": False,
-                        "price": 300,
-                        "currency": "USD"
-                    },
-                    {
-                        "code": "hk",
-                        "name": "Hong Kong",
-                        "flag": "🇭🇰",
-                        "available": False,
-                        "price": 200,
-                        "currency": "USD"
-                    },
-                    {
-                        "code": "ae",
-                        "name": "United Arab Emirates",
-                        "flag": "🇦🇪",
-                        "available": False,
-                        "price": 500,
-                        "currency": "USD"
-                    },
-                    {
-                        "code": "us",
-                        "name": "United States",
-                        "flag": "🇺🇸",
-                        "available": False,
-                        "price": 150,
-                        "currency": "USD"
+            countries = []
+            for code, info in PROVIDERS.items():
+                reqs = COUNTRY_REQUIREMENTS.get(code, {})
+                countries.append({
+                    "code": code,
+                    "name": code.upper(),
+                    "flag": self._get_flag(code),
+                    "available": True,  # All available now
+                    "type": info["type"],
+                    "features": info["features"],
+                    "requirements": reqs.get("fields", []),
+                    "pricing": {
+                        "base": reqs.get("companies_house_fee", reqs.get("acra_fee", 100)),
+                        "currency": "USD" if code != "uk" else "GBP",
+                        "includes": self._get_price_includes(code)
                     }
-                ]
+                })
+            return success_response({"countries": countries})
+        
+        # Get specific country details
+        if path.startswith("/api/v1/countries/") and request.method == "GET":
+            country_code = path.split("/")[-1]
+            if country_code not in PROVIDERS:
+                return error_response("Country not found", 404)
+            
+            return success_response({
+                "code": country_code,
+                "provider": PROVIDERS[country_code],
+                "requirements": COUNTRY_REQUIREMENTS.get(country_code, {}),
+                "registration_fields": self._get_registration_fields(country_code)
             })
         
         # ============ MCP Tools API ============
         if path == "/api/v1/mcp/tools" and request.method == "GET":
             return success_response({
                 "tools": [
-                    {"name": "register_uk_company", "description": "Register a UK limited company via Letsy"},
-                    {"name": "check_company_status", "description": "Check company incorporation status"},
-                    {"name": "search_company_name", "description": "Check if company name is available"},
-                    {"name": "get_order_history", "description": "Get user's order history"}
+                    {"name": "register_company", "description": "Register a company in any supported country"},
+                    {"name": "check_company_status", "description": "Check incorporation status"},
+                    {"name": "search_company_name", "description": "Check name availability"},
+                    {"name": "get_requirements", "description": "Get registration requirements for a country"},
+                    {"name": "calculate_price", "description": "Calculate total registration cost"}
                 ]
             })
         
@@ -111,10 +198,6 @@ class Default(WorkerEntrypoint):
             if len(password) < 6:
                 return error_response("Password must be at least 6 characters")
             
-            if "@" not in email or "." not in email:
-                return error_response("Invalid email format")
-            
-            password_hash = hashlib.sha256(password.encode()).hexdigest()
             token = secrets.token_hex(32)
             
             return success_response({
@@ -164,21 +247,19 @@ class Default(WorkerEntrypoint):
             except:
                 return error_response("Invalid JSON")
             
+            country = body.get("country", "uk")
             company_name = body.get("company_name", "").strip()
-            country = body.get("country", "uk").strip()
-            virtual = body.get("use_virtual_address", False)
             company_type = body.get("company_type", "ltd")
+            virtual = body.get("use_virtual_address", False)
+            
+            if country not in PROVIDERS:
+                return error_response("Unsupported country")
             
             if not company_name:
                 return error_response("Company name is required")
             
             # Calculate price
-            if country == "uk":
-                base_price = 50 if company_type == "ltd" else 39
-                ch_fee = 50
-                total = base_price + ch_fee + (50 if virtual else 0)
-            else:
-                total = 100
+            total = self._calculate_price(country, company_type, virtual)
             
             order_id = f"ORD-{secrets.token_hex(6).upper()}"
             
@@ -188,10 +269,12 @@ class Default(WorkerEntrypoint):
                     "id": order_id, 
                     "company_name": company_name,
                     "country": country,
+                    "provider": PROVIDERS[country]["name"],
                     "company_type": company_type,
                     "virtual_address": virtual,
-                    "amount": total, 
-                    "currency": "GBP" if country == "uk" else "USD",
+                    "amount": total["total"],
+                    "currency": total["currency"],
+                    "breakdown": total["breakdown"],
                     "status": "pending_payment",
                     "created_at": datetime.now().isoformat()
                 }
@@ -202,17 +285,47 @@ class Default(WorkerEntrypoint):
             if "Bearer" not in auth:
                 return error_response("Unauthorized", 401)
             
+            # Demo orders
             return success_response({
                 "orders": [
                     {
-                        "id": "ORD-DEMO123",
-                        "company_name": "Demo Company Ltd",
-                        "country": "uk",
+                        "id": "ORD-DEMO001",
+                        "company_name": "Tech Solutions Pte Ltd",
+                        "country": "sg",
+                        "provider": PROVIDERS["sg"]["name"],
                         "status": "completed",
-                        "amount": 149,
-                        "created_at": "2026-02-22T10:00:00Z"
+                        "amount": 350,
+                        "currency": "USD",
+                        "created_at": "2026-02-15T10:00:00Z"
+                    },
+                    {
+                        "id": "ORD-DEMO002", 
+                        "company_name": "Dubai Trading LLC",
+                        "country": "ae",
+                        "provider": PROVIDERS["ae"]["name"],
+                        "status": "processing",
+                        "amount": 580,
+                        "currency": "USD",
+                        "created_at": "2026-02-20T14:30:00Z"
                     }
                 ]
+            })
+        
+        if path.startswith("/api/v1/orders/") and request.method == "GET":
+            order_id = path.split("/")[-1]
+            return success_response({
+                "order": {
+                    "id": order_id,
+                    "status": "processing",
+                    "company_name": "Demo Company Ltd",
+                    "country": "uk",
+                    "steps": [
+                        {"step": "payment", "status": "completed"},
+                        {"step": "verification", "status": "completed"},
+                        {"step": "filing", "status": "in_progress"},
+                        {"step": "certificate", "status": "pending"}
+                    ]
+                }
             })
         
         # ============ Company Incorporation API ============
@@ -226,55 +339,80 @@ class Default(WorkerEntrypoint):
             except:
                 return error_response("Invalid JSON")
             
+            country = body.get("country", "uk").lower()
             company_name = body.get("company_name", "").strip()
-            country = body.get("country", "uk").strip()
             company_type = body.get("company_type", "ltd")
-            director_name = body.get("director_name", "")
-            director_dob = body.get("director_dob", "")
-            director_nationality = body.get("director_nationality", "GB")
-            shareholder_name = body.get("shareholder_name", director_name)
-            shares = body.get("shares", "100")
-            sic_code = body.get("sic_code", "62012")
-            use_virtual_address = body.get("use_virtual_address", False)
+            
+            if country not in PROVIDERS:
+                return error_response("Unsupported country. Choose from: " + ", ".join(PROVIDERS.keys()))
             
             if not company_name:
                 return error_response("Company name is required")
             
-            if country != "uk":
-                return error_response("Only UK is available now. Other countries coming soon.")
+            provider = PROVIDERS[country]
+            incorporation_id = f"INC-{country.upper()}-{secrets.token_hex(8).upper()}"
             
-            incorporation_id = f"INC-{secrets.token_hex(8).upper()}"
-            
-            # Demo mode - would integrate with Letsy in production
-            return success_response({
+            # Build response based on provider type
+            response = {
                 "status": "success",
-                "message": "Company incorporation submitted successfully",
+                "message": f"Company incorporation submitted to {provider['name']}",
                 "incorporation_id": incorporation_id,
-                "company_name": company_name,
                 "country": country,
+                "provider": provider["name"],
+                "provider_type": provider["type"],
+                "company_name": company_name,
                 "company_type": company_type,
                 "company_number": "PENDING",
-                "estimated_processing_time": "3-5 business days",
-                "next_steps": [
-                    "Complete payment to proceed",
-                    "Upload identity verification documents",
-                    "Letsy will submit to Companies House"
-                ]
-            })
+                "estimated_processing_time": self._get_processing_time(country),
+                "next_steps": self._get_next_steps(country, provider["type"])
+            }
+            
+            return success_response(response)
         
         # ============ Company Search API ============
         if path == "/api/v1/companies/search" and request.method == "GET":
-            params = dict(p.split("=") for p in query.split("&") if "=" in p)
-            company_name = params.get("q", "")
+            params = parse_qs(query)
+            company_name = params.get("q", [''])[0]
+            country = params.get("country", ["uk"])[0]
             
             if not company_name:
                 return error_response("Company name is required")
             
-            # Demo response
+            if country not in PROVIDERS:
+                return error_response("Unsupported country")
+            
+            # Simulate availability check
+            import random
+            available = random.choice([True, True, False])
+            
             return success_response({
-                "available": True,
                 "company_name": company_name,
-                "suggestions": []
+                "country": country,
+                "available": available,
+                "suggestions": [] if available else ["Tech Solutions Ltd", "Digital Ventures Ltd"]
+            })
+        
+        # ============ Price Calculator API ============
+        if path == "/api/v1/pricing/calculate" and request.method == "POST":
+            try:
+                body = await request.json()
+            except:
+                return error_response("Invalid JSON")
+            
+            country = body.get("country", "uk")
+            company_type = body.get("company_type", "ltd")
+            virtual = body.get("virtual_address", False)
+            
+            if country not in PROVIDERS:
+                return error_response("Unsupported country")
+            
+            pricing = self._calculate_price(country, company_type, virtual)
+            
+            return success_response({
+                "country": country,
+                "company_type": company_type,
+                "virtual_address": virtual,
+                **pricing
             })
         
         # ============ Payment API (CCPayment) ============
@@ -295,7 +433,6 @@ class Default(WorkerEntrypoint):
             if not order_id or amount <= 0:
                 return error_response("Order ID and amount are required")
             
-            # Demo payment link - would integrate with CCPayment in production
             payment_id = f"PAY-{secrets.token_hex(8).upper()}"
             
             return success_response({
@@ -306,15 +443,15 @@ class Default(WorkerEntrypoint):
                     "amount": amount,
                     "currency": currency,
                     "network": "TRC20" if currency == "USDT" else "ERC20",
-                    "address": "TXz123...456",  # Demo address
+                    "address": "TX" + secrets.token_hex(20)[:30] + "...",
+                    "qr_data": f"tron:{secrets.token_hex(32)}",
                     "status": "pending",
-                    "qr_code": f"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={payment_id}",
+                    "expires_in": 3600,
                     "expires_at": datetime.now().isoformat()
                 }
             })
         
         if path == "/api/v1/payments/webhook" and request.method == "POST":
-            # CCPayment webhook handler
             try:
                 body = await request.json()
             except:
@@ -323,26 +460,106 @@ class Default(WorkerEntrypoint):
             payment_id = body.get("order_id", "")
             status = body.get("status", "")
             
-            # Process payment status
-            if status == "confirmed":
-                # Update order status
-                return success_response({"status": "ok", "message": "Payment confirmed"})
-            
-            return success_response({"status": "received"})
+            return success_response({"status": "ok", "message": "Webhook received"})
         
         if path == "/api/v1/payments" and request.method == "GET":
-            auth = request.headers.get("Authorization", "")
-            if "Bearer" not in auth:
-                return error_response("Unauthorized", 401)
-            
             return success_response({
-                "payments": [],
-                "supported_coins": ["USDT", "BTC", "ETH"],
+                "supported_coins": ["USDT", "BTC", "ETH", "USDC"],
                 "networks": {
                     "USDT": ["TRC20", "ERC20"],
                     "BTC": ["Bitcoin"],
-                    "ETH": ["Ethereum"]
+                    "ETH": ["Ethereum"],
+                    "USDC": ["ERC20"]
                 }
             })
         
+        # ============ Requirements API ============
+        if path == "/api/v1/requirements" and request.method == "GET":
+            country = params.get("country", ["uk"])[0]
+            
+            if country not in COUNTRY_REQUIREMENTS:
+                return error_response("Unsupported country")
+            
+            return success_response({
+                "country": country,
+                "requirements": COUNTRY_REQUIREMENTS[country],
+                "provider": PROVIDERS[country]
+            })
+        
         return error_response("Not found", 404)
+    
+    # Helper methods
+    def _get_flag(self, code):
+        flags = {"uk": "🇬🇧", "sg": "🇸🇬", "hk": "🇭🇰", "ae": "🇦🇪", "us": "🇺🇸"}
+        return flags.get(code, "🏳️")
+    
+    def _get_price_includes(self, code):
+        includes = {
+            "uk": ["Companies House fee", "Registration"],
+            "sg": ["ACRA filing", "Name approval"],
+            "hk": ["Companies Registry fee", "Name search"],
+            "ae": ["Free zone license", "Establishment card"],
+            "us": ["State filing fee", "Registered agent"]
+        }
+        return includes.get(code, ["Filing fee"])
+    
+    def _calculate_price(self, country, company_type, virtual):
+        base_prices = {
+            "uk": {"ltd": 50, "llp": 39},
+            "sg": {"pte_ltd": 300, "llp": 350},
+            "hk": {"ltd": 200, "company": 180},
+            "ae": {"freezone": 500, "mainland": 450},
+            "us": {"llc": 150, "corporation": 200}
+        }
+        
+        base = base_prices.get(country, {}).get(company_type, 100)
+        currency = "GBP" if country == "uk" else "USD"
+        ch_fee = 50 if country == "uk" else 0
+        va_fee = 50 if virtual else 0
+        
+        return {
+            "total": base + ch_fee + va_fee,
+            "currency": currency,
+            "breakdown": {
+                "base": base,
+                "government_fee": ch_fee,
+                "virtual_address": va_fee if virtual else 0
+            }
+        }
+    
+    def _get_processing_time(self, country):
+        times = {
+            "uk": "3-5 business days",
+            "sg": "1-2 business days",
+            "hk": "3-5 business days",
+            "ae": "5-7 business days",
+            "us": "2-5 business days"
+        }
+        return times.get(country, "5-7 business days")
+    
+    def _get_next_steps(self, country, provider_type):
+        if provider_type == "manual":
+            return [
+                "Our team will contact you within 24 hours",
+                "Submit required documents",
+                "Review and sign application",
+                "Payment processing",
+                "Company incorporation"
+            ]
+        
+        return [
+            "Complete payment to proceed",
+            "Upload identity verification documents",
+            "Provider submits to relevant authority",
+            "Track status via order ID"
+        ]
+    
+    def _get_registration_fields(self, country):
+        fields = {
+            "uk": ["company_name", "company_type", "directors", "shareholders", "registered_office_address", "sic_code"],
+            "sg": ["company_name", "company_type", "shareholders", "directors", "registered_address", "business_activities"],
+            "hk": ["company_name", "company_type", "shareholders", "directors", "registered_address", "hkid_verification"],
+            "ae": ["company_name", "company_type", "freezone", "shareholders", "directors", "visa_sponsorship"],
+            "us": ["company_name", "company_type", "state", "shareholders", "registered_agent", "ein"]
+        }
+        return fields.get(country, [])

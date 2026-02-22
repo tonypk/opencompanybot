@@ -661,12 +661,25 @@
             background: var(--primary);
         }
 
-        .step.completed {
-            background: var(--accent);
+        .country-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
         }
 
-        .step.active {
-            background: var(--primary);
+        .country-option:hover {
+            border-color: var(--primary);
+        }
+
+        .country-option.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
         }
 
         .step-label span {
@@ -1043,24 +1056,36 @@
                 <div id="step1">
                     <div class="form-group">
                         <label>Select Country</label>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px;">
-                            <label style="display: flex; flex-direction: column; align-items: center; padding: 16px; border: 2px solid var(--primary); border-radius: var(--radius); cursor: pointer; background: var(--primary-light);">
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px;">
+                            <label class="country-option active" data-country="uk">
                                 <input type="radio" name="country" value="uk" checked style="display: none;">
-                                <span style="font-size: 32px;">🇬🇧</span>
-                                <span style="font-weight: 600; margin-top: 8px;">UK</span>
-                                <span style="font-size: 12px; color: var(--primary);">Available</span>
+                                <span style="font-size: 24px;">🇬🇧</span>
+                                <span style="font-weight: 600; margin-top: 4px;">UK</span>
+                                <span style="font-size: 10px; color: var(--accent);">£50+</span>
                             </label>
-                            <label style="display: flex; flex-direction: column; align-items: center; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius); cursor: not-allowed; opacity: 0.5;">
-                                <input type="radio" name="country" value="sg" disabled style="display: none;">
-                                <span style="font-size: 32px;">🇸🇬</span>
-                                <span style="font-weight: 600; margin-top: 8px;">SG</span>
-                                <span style="font-size: 12px; color: var(--text-muted);">Soon</span>
+                            <label class="country-option" data-country="sg">
+                                <input type="radio" name="country" value="sg" style="display: none;">
+                                <span style="font-size: 24px;">🇸🇬</span>
+                                <span style="font-weight: 600; margin-top: 4px;">SG</span>
+                                <span style="font-size: 10px; color: var(--accent);">$300+</span>
                             </label>
-                            <label style="display: flex; flex-direction: column; align-items: center; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius); cursor: not-allowed; opacity: 0.5;">
-                                <input type="radio" name="country" value="hk" disabled style="display: none;">
-                                <span style="font-size: 32px;">🇭🇰</span>
-                                <span style="font-weight: 600; margin-top: 8px;">HK</span>
-                                <span style="font-size: 12px; color: var(--text-muted);">Soon</span>
+                            <label class="country-option" data-country="hk">
+                                <input type="radio" name="country" value="hk" style="display: none;">
+                                <span style="font-size: 24px;">🇭🇰</span>
+                                <span style="font-weight: 600; margin-top: 4px;">HK</span>
+                                <span style="font-size: 10px; color: var(--accent);">$200+</span>
+                            </label>
+                            <label class="country-option" data-country="ae">
+                                <input type="radio" name="country" value="ae" style="display: none;">
+                                <span style="font-size: 24px;">🇦🇪</span>
+                                <span style="font-weight: 600; margin-top: 4px;">UAE</span>
+                                <span style="font-size: 10px; color: var(--accent);">$500+</span>
+                            </label>
+                            <label class="country-option" data-country="us">
+                                <input type="radio" name="country" value="us" style="display: none;">
+                                <span style="font-size: 24px;">🇺🇸</span>
+                                <span style="font-weight: 600; margin-top: 4px;">USA</span>
+                                <span style="font-size: 10px; color: var(--accent);">$150+</span>
                             </label>
                         </div>
                     </div>
@@ -1155,6 +1180,7 @@
                         <p><strong>Company:</strong> <span id="reviewCompany">-</span></p>
                         <p><strong>Type:</strong> <span id="reviewType">Ltd</span></p>
                         <p><strong>Director:</strong> <span id="reviewDirector">-</span></p>
+                        <p><strong>Virtual Address:</strong> <span id="reviewVirtual">No</span></p>
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
@@ -1330,7 +1356,6 @@
         }
         
         function nextStep() {
-            // Validate current step
             if (currentStep === 1) {
                 const country = document.querySelector('input[name="country"]:checked');
                 if (!country) {
@@ -1338,13 +1363,85 @@
                     return;
                 }
                 selectedCountry = country.value;
+                updateFormFields(selectedCountry);
+                
+                // Update country options visual state
+                document.querySelectorAll('.country-option').forEach(opt => {
+                    opt.classList.toggle('active', opt.dataset.country === selectedCountry);
+                });
             }
             
             if (currentStep < totalSteps) {
                 currentStep++;
                 updateStepBar();
+                
+                // Update review section
+                if (currentStep === 5) {
+                    const countryNames = {'uk': 'UK', 'sg': 'Singapore', 'hk': 'Hong Kong', 'ae': 'UAE', 'us': 'USA'};
+                    document.getElementById('reviewCountry').textContent = countryNames[selectedCountry] || selectedCountry.toUpperCase();
+                    document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value || '-';
+                    document.getElementById('reviewType').textContent = document.getElementById('companyType').value || '-';
+                    document.getElementById('reviewDirector').textContent = document.getElementById('directorName').value || '-';
+                    const vaEl = document.getElementById('useVirtualAddress');
+                    document.getElementById('reviewVirtual').textContent = (vaEl && vaEl.checked) ? 'Yes' : 'No';
+                }
             } else {
                 submitRegistration();
+            }
+        }
+        
+        function updateFormFields(country) {
+            const companyType = document.getElementById('companyType');
+            const sicCode = document.getElementById('sicCode');
+            
+            // Update company types based on country
+            const types = {
+                'uk': [
+                    {value: 'ltd', text: 'Private Limited Company (Ltd)'},
+                    {value: 'llp', text: 'Limited Liability Partnership (LLP)'}
+                ],
+                'sg': [
+                    {value: 'pte_ltd', text: 'Private Limited (Pte Ltd)'},
+                    {value: 'llp', text: 'Limited Liability Partnership'}
+                ],
+                'hk': [
+                    {value: 'ltd', text: 'Private Limited Company'},
+                    {value: 'company', text: 'Company Limited by Shares'}
+                ],
+                'ae': [
+                    {value: 'freezone', text: 'Freezone Company'},
+                    {value: 'mainland', text: 'Mainland Company'}
+                ],
+                'us': [
+                    {value: 'llc', text: 'Limited Liability Company (LLC)'},
+                    {value: 'corporation', text: 'Corporation (C Corp)'}
+                ]
+            };
+            
+            const options = types[country] || types['uk'];
+            companyType.innerHTML = options.map(t => 
+                `<option value="${t.value}">${t.text}</option>`
+            ).join('');
+            
+            // Update virtual address label
+            const vaCheckbox = document.getElementById('useVirtualAddress');
+            if (vaCheckbox) {
+                const vaLabel = vaCheckbox.parentElement;
+                if (country === 'uk') {
+                    vaLabel.innerHTML = '<input type="checkbox" id="useVirtualAddress" style="width:18px;height:18px;"><span>Use virtual office address (+£50)</span>';
+                } else {
+                    vaLabel.innerHTML = '<input type="checkbox" id="useVirtualAddress" style="width:18px;height:18px;"><span>Use virtual office address (+$50)</span>';
+                }
+            }
+            
+            // Update summary
+            const summaryVirtual = document.getElementById('summaryVirtual');
+            const summaryTotal = document.getElementById('summaryTotal');
+            if (summaryVirtual && summaryTotal) {
+                summaryVirtual.textContent = 'No';
+                const prices = {'uk': '£', 'sg': '$', 'hk': '$', 'ae': '$', 'us': '$'};
+                const price = prices[country] || '$';
+                summaryTotal.textContent = country === 'uk' ? '£149' : price + '400';
             }
         }
         
@@ -1361,9 +1458,10 @@
             btn.innerHTML = '<span class="spinner"></span>Processing...';
             
             const formData = {
+                country: selectedCountry,
                 company_name: document.getElementById('companyName').value,
                 company_type: document.getElementById('companyType').value,
-                use_virtual_address: document.getElementById('useVirtualAddress').checked,
+                use_virtual_address: document.getElementById('useVirtualAddress') ? document.getElementById('useVirtualAddress').checked : false,
                 director_name: document.getElementById('directorName').value,
                 director_dob: document.getElementById('directorDob').value,
                 director_nationality: document.getElementById('directorNationality').value,
