@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCompanyBot - AI-Powered Company Registration</title>
-    <meta name="description" content="Register companies in UK, Singapore, HK, UAE, USA with AI assistance. Secure USDT payments.">
+    <title>OpenCompanyBot - Give AI Its Own Company</title>
+    <meta name="description" content="The first platform enabling AI agents to own and operate companies. Let your AI become a legal entity. Register in UK, SG, HK, UAE, USA.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -864,8 +864,8 @@
     <!-- Hero -->
     <section class="hero">
         <div class="container">
-            <h1>AI-Powered<br><span>Company Registration</span></h1>
-            <p>Register companies in multiple countries with AI assistance. Secure USDT payments, instant processing, and full support.</p>
+            <h1>Give AI Its<br><span>Own Company</span></h1>
+            <p>The first platform enabling AI agents to own and operate companies. Let your AI become a legal entity. Secure USDT payments, instant processing, and full support.</p>
             <div class="hero-btns">
                 <button class="btn btn-primary" onclick="startRegistration()">Start Registration</button>
                 <button class="btn btn-secondary" onclick="scrollToFeatures()">Learn More</button>
@@ -909,6 +909,37 @@
                     <div class="country-name">USA</div>
                     <div class="country-price">From $150</div>
                     <span class="country-status available">✓ Available</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Company Philosophy -->
+    <section class="features" style="background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">🤖 AI Can Own Companies</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.7);">The future is here. Your AI agent can now be the legal owner of a company.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="feature-icon" style="background: rgba(139, 92, 246, 0.2);">🧠</div>
+                    <h3 style="color: white;">AI as Legal Entity</h3>
+                    <p style="color: rgba(255,255,255,0.7);">Register a company where the AI agent is the director and shareholder. The first step toward autonomous AI business.</p>
+                </div>
+                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="feature-icon" style="background: rgba(139, 92, 246, 0.2);">🔗</div>
+                    <h3 style="color: white;">MCP Integration</h3>
+                    <p style="color: rgba(255,255,255,0.7);">Full MCP protocol support. Your AI can programmatically manage the company via API.</p>
+                </div>
+                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="feature-icon" style="background: rgba(139, 92, 246, 0.2);">💰</div>
+                    <h3 style="color: white;">Autonomous Finance</h3>
+                    <p style="color: rgba(255,255,255,0.7);">AI can hold company funds in USDT, make payments, and manage finances independently.</p>
+                </div>
+                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="feature-icon" style="background: rgba(139, 92, 246, 0.2);">🌐</div>
+                    <h3 style="color: white;">Global Presence</h3>
+                    <p style="color: rgba(255,255,255,0.7);">Establish AI-owned companies in UK, Singapore, HK, UAE, USA and expand globally.</p>
                 </div>
             </div>
         </div>
@@ -1461,18 +1492,6 @@
                     // Update payment amount
                     const prices = {'uk': '£149', 'sg': '$400', 'hk': '$300', 'ae': '$600', 'us': '$250'};
                     document.getElementById('paymentAmount').textContent = prices[selectedCountry] || '$300';
-                }
-            } else {
-                submitRegistration();
-            }
-        }
-                    const countryNames = {'uk': 'UK', 'sg': 'Singapore', 'hk': 'Hong Kong', 'ae': 'UAE', 'us': 'USA'};
-                    document.getElementById('reviewCountry').textContent = countryNames[selectedCountry] || selectedCountry.toUpperCase();
-                    document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value || '-';
-                    document.getElementById('reviewType').textContent = document.getElementById('companyType').value || '-';
-                    document.getElementById('reviewDirector').textContent = document.getElementById('directorName').value || '-';
-                    const vaEl = document.getElementById('useVirtualAddress');
-                    document.getElementById('reviewVirtual').textContent = (vaEl && vaEl.checked) ? 'Yes' : 'No';
                 }
             } else {
                 submitRegistration();
