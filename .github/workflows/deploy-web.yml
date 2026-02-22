@@ -1,11 +1,28 @@
-# Website Deployment Note
-# 
-# Due to Cloudflare Pages API issues, please deploy the website manually:
-#
-# 1. Go to https://dash.cloudflare.com/
-# 2. Go to Pages > Create a project
-# 3. Connect to GitHub and select this repository
-# 4. Set build output directory to: web/public
-# 5. Deploy
-#
-# Or use Cloudflare Dashboard to upload the static files from web/public/
+name: Deploy Website to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/public/**'
+      - '.github/workflows/deploy-web.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: opencompanybot
+          directory: web/public
+          # Optional: Set this if you want to use a specific branch
+          branch: main

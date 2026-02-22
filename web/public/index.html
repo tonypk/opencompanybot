@@ -788,7 +788,7 @@
             };
 
             try {
-                const response = await fetch('https://opencompanybot-prod.tonyntony.workers.dev/api/v1/companies/incorporate', {
+                const response = await fetch(API_BASE + '/api/v1/companies/incorporate', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
@@ -815,7 +815,6 @@
 
         // Auth API Modal
         const API_BASE = 'https://opencompanybot.tonyntony.workers.dev';
-        let currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
         
         function openModal(tab) {
             document.getElementById('authModal').classList.add('active');
