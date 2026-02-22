@@ -7,6 +7,10 @@ account_id = "35ae7776e494993cad13e4df0a906efe"
 
 workers_dev = true
 
+routes = [
+  { pattern = "opencompanybot.com/api/*", zone_name = "opencompanybot.com" }
+]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "opencompanybot"
