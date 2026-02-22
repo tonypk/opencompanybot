@@ -601,6 +601,7 @@
             try {
                 const response = await fetch('https://opencompanybot-prod.tonyntony.workers.dev/api/v1/companies/incorporate', {
                     method: 'POST',
+                    mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -613,10 +614,11 @@
                     alertEl.innerHTML = '<div class="alert alert-success">Company registered successfully! Company Number: ' + (result.company_number || 'Pending') + '</div>';
                     this.reset();
                 } else {
-                    alertEl.innerHTML = '<div class="alert alert-error">Error: ' + (result.detail || 'Registration failed. Please try again.') + '</div>';
+                    alertEl.innerHTML = '<div class="alert alert-error">Error: ' + (result.detail || result.message || 'Registration failed. Please try again.') + '</div>';
                 }
             } catch (error) {
-                alertEl.innerHTML = '<div class="alert alert-error">Network error. Please try again later.</div>';
+                console.error('Form submission error:', error);
+                alertEl.innerHTML = '<div class="alert alert-error">Network error. Please try again later. Error: ' + error.message + '</div>';
             } finally {
                 submitBtn.disabled = false;
             }
