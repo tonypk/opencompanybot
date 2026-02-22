@@ -744,7 +744,7 @@
                 <div class="country-card available" onclick="selectCountry('uk')">
                     <div class="country-flag">🇬🇧</div>
                     <div class="country-name">英国 (UK)</div>
-                    <div class="country-price">从 £50 起</div>
+                    <div class="country-price">从 $50 起</div>
                     <span class="country-status available">✓ 可用</span>
                 </div>
                 <div class="country-card available" onclick="selectCountry('sg')">
@@ -788,17 +788,17 @@
                         <li><span class="label">至少一名董事</span><span class="value">✓ 需要</span></li>
                         <li><span class="label">至少一名股东</span><span class="value">✓ 需要</span></li>
                         <li><span class="label">注册地址</span><span class="value">✓ 需要</span></li>
-                        <li><span class="label">最低资本</span><span class="value">£1</span></li>
+                        <li><span class="label">最低资本</span><span class="value">$1</span></li>
                         <li><span class="label">成立时间</span><span class="value">3-5工作日</span></li>
                     </ul>
                 </div>
                 <div class="detail-card">
                     <h3>💰 费用明细</h3>
                     <ul id="feeList">
-                        <li><span class="label">政府注册费</span><span class="value">£50</span></li>
-                        <li><span class="label">我们的服务费</span><span class="value">£50起</span></li>
-                        <li><span class="label">虚拟地址</span><span class="value">£50/年</span></li>
-                        <li><span class="label">公司秘书</span><span class="value">£120/年</span></li>
+                        <li><span class="label">政府注册费</span><span class="value">$50</span></li>
+                        <li><span class="label">我们的服务费</span><span class="value">$50起</span></li>
+                        <li><span class="label">虚拟地址</span><span class="value">$50/年</span></li>
+                        <li><span class="label">公司秘书</span><span class="value">$120/年</span></li>
                     </ul>
                 </div>
             </div>
@@ -890,7 +890,7 @@
             <div class="pricing-grid">
                 <div class="pricing-card">
                     <div class="pricing-name">标准版</div>
-                    <div class="pricing-price">£50 <span>+ £50 政府费</span></div>
+                    <div class="pricing-price">$50 <span>+ $50 政府费</span></div>
                     <div class="pricing-desc">适合基本公司注册</div>
                     <ul class="pricing-features">
                         <li>公司注册</li>
@@ -903,7 +903,7 @@
                 <div class="pricing-card featured">
                     <div class="pricing-badge">最受欢迎</div>
                     <div class="pricing-name">高级版</div>
-                    <div class="pricing-price">£99 <span>+ £50 政府费</span></div>
+                    <div class="pricing-price">$99 <span>+ $50 政府费</span></div>
                     <div class="pricing-desc">包含所有附加服务</div>
                     <ul class="pricing-features">
                         <li>公司注册</li>
@@ -1040,9 +1040,9 @@
                         </tr>
                         <tr>
                             <td style="padding: 16px;">起价</td>
-                            <td style="text-align: center; padding: 16px; color: var(--primary); font-weight: 600;">£50</td>
-                            <td style="text-align: center; padding: 16px;">£200+</td>
-                            <td style="text-align: center; padding: 16px;">£50+</td>
+                            <td style="text-align: center; padding: 16px; color: var(--primary); font-weight: 600;">$50</td>
+                            <td style="text-align: center; padding: 16px;">$200+</td>
+                            <td style="text-align: center; padding: 16px;">$50+</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1440,7 +1440,7 @@
                         <p style="font-size: 13px; color: var(--text-secondary);">
                             国家: <strong id="summaryCountry">UK</strong><br>
                             虚拟地址: <strong id="summaryVirtual">否</strong><br>
-                            总计: <strong id="summaryTotal">£149</strong>
+                            总计: <strong id="summaryTotal">$149</strong>
                         </p>
                     </div>
                     <div style="display: flex; gap: 12px; margin-top: 16px;">
@@ -1458,7 +1458,7 @@
                         </p>
                         <div style="background: var(--bg); padding: 12px; border-radius: var(--radius); text-align: center;">
                             <p style="font-size: 12px; color: var(--text-muted);">总金额</p>
-                            <p style="font-size: 28px; font-weight: 700; color: var(--primary);" id="paymentAmount">£149</p>
+                            <p style="font-size: 28px; font-weight: 700; color: var(--primary);" id="paymentAmount">$149</p>
                         </div>
                     </div>
                     <div style="display: flex; gap: 12px;">
@@ -1547,26 +1547,26 @@
         const countryData = {
             uk: {
                 name: '英国',
-                req: { director: '需要', shareholder: '需要', address: '需要', capital: '£1', time: '3-5工作日' },
-                fee: { government: '£50', service: '£50起', virtual: '£50/年', secretary: '£120/年' },
-                price: '£149'
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: '$1', time: '3-5工作日' },
+                fee: { government: '$50', service: '$50起', virtual: '$50/年', secretary: '$150/年' },
+                price: '$149'
             },
             sg: {
                 name: '新加坡',
-                req: { director: '需要', shareholder: '需要', address: '需要', capital: 'S$1', time: '1-3工作日' },
-                fee: { government: 'S$315', service: 'S$300起', virtual: 'S$200/年', secretary: 'S$200/年' },
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: '$1', time: '1-3工作日' },
+                fee: { government: '$315', service: '$300起', virtual: '$200/年', secretary: '$200/年' },
                 price: '$400'
             },
             hk: {
                 name: '香港',
-                req: { director: '需要', shareholder: '需要', address: '需要', capital: 'HK$1', time: '1-2工作日' },
-                fee: { government: 'HK$1720', service: 'HK$500起', virtual: 'HK$300/年', secretary: 'HK$300/年' },
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: '$1', time: '1-2工作日' },
+                fee: { government: '$220', service: '$200起', virtual: '$150/年', secretary: '$150/年' },
                 price: '$300'
             },
             ae: {
                 name: '阿联酋',
-                req: { director: '需要', shareholder: '需要', address: '需要', capital: 'AED1', time: '5-7工作日' },
-                fee: { government: 'AED500', service: 'AED500起', virtual: 'AED1000/年', secretary: 'AED500/年' },
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: '$1', time: '5-7工作日' },
+                fee: { government: '$150', service: '$500起', virtual: '$300/年', secretary: '$200/年' },
                 price: '$600'
             },
             us: {
