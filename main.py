@@ -1,5 +1,10 @@
 import json
+import os
 from workers import WorkerEntrypoint, Response, Request
+
+
+COMPANIES_HOUSE_API_KEY = os.getenv("COMPANIES_HOUSE_API_KEY", "0dc87912-e470-473e-ba51-12d0a19fceb5")
+COMPANIES_HOUSE_URL = "https://api.company-information.service.gov.uk"
 
 
 class Router:
@@ -37,6 +42,79 @@ async def root(request):
         }),
         headers={"content-type": "application/json"},
     )
+
+
+async def incorporate_company(request):
+    try:
+        body = await request.json()
+    except:
+        return Response(
+            json.dumps({"error": "Invalid JSON body"}),
+            status=400,
+            headers={"content-type": "application/json"},
+        )
+
+    company_name = body.get("company_name")
+    if not company_name:
+        return Response(
+            json.dumps({"error": "company_name is required"}),
+            status=400,
+            headers={"content-type": "application/json"},
+        )
+
+    payload = json.dumps({
+        "company_name": company_name,
+        "type": body.get("company_type", "ltd"),
+        "registered_office_address": body.get("registered_office_address", {}),
+        "directors": body.get("directors", []),
+        "shareholders": body.get("shareholders", []),
+        "sic_codes": body.get("sic_codes", []),
+    })
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Basic {COMPANIES_HOUSE_API_KEY}",
+    }
+
+    try:
+        ch_response = await fetch(
+            f"{COMPANIES_HOUSE_URL}/company/incorporation",
+            method="POST",
+            headers=headers,
+            body=payload,
+        )
+        
+        if ch_response.ok:
+            result = await ch_response.json()
+            return Response(
+                json.dumps({
+                    "status": "success",
+                    "message": "Company incorporation submitted",
+                    "company_name": company_name,
+                    "company_number": result.get("company_number", "PENDING"),
+                }),
+                headers={"content-type": "application/json"},
+            )
+        else:
+            error_text = await ch_response.text()
+            return Response(
+                json.dumps({
+                    "status": "error",
+                    "error": "Companies House API error",
+                    "details": error_text,
+                }),
+                status=ch_response.status,
+                headers={"content-type": "application/json"},
+            )
+    except Exception as e:
+        return Response(
+            json.dumps({
+                "status": "error",
+                "error": str(e),
+            }),
+            status=500,
+            headers={"content-type": "application/json"},
+        )
 
 
 async def list_mcp_tools(request):
@@ -86,6 +164,7 @@ async def list_mcp_tools(request):
 
 router.add_route("GET", "/health", health_check)
 router.add_route("GET", "/", root)
+router.add_route("POST", "/api/v1/companies/incorporate", incorporate_company)
 router.add_route("GET", "/api/v1/mcp/tools", list_mcp_tools)
 
 
