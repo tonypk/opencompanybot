@@ -857,7 +857,8 @@
                     document.getElementById('loginError').textContent = data.error || 'Login failed';
                 }
             } catch (err) {
-                document.getElementById('loginError').textContent = 'Network error';
+                console.error('Login error:', err);
+                document.getElementById('loginError').textContent = 'Network error: ' + err.message;
             }
         }
         
@@ -887,7 +888,8 @@
                     document.getElementById('regError').textContent = data.error || 'Registration failed';
                 }
             } catch (err) {
-                document.getElementById('regError').textContent = 'Network error';
+                console.error('Registration error:', err);
+                document.getElementById('regError').textContent = 'Network error: ' + err.message;
             }
         }
         
