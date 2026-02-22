@@ -1462,6 +1462,25 @@
             document.getElementById('activeAgents').textContent = activeAgents;
             document.getElementById('avgRating').textContent = avgRating;
         }
+        
+        // Load agent stats from API periodically
+        function loadAgentStats() {
+            fetch('https://opencompanybot.com/api/v1/agents')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.summary) {
+                        document.getElementById('totalTasks').textContent = data.summary.total_tasks_completed?.toLocaleString() || '-';
+                        document.getElementById('activeAgents').textContent = data.summary.active_agents || '-';
+                        document.getElementById('avgRating').textContent = data.summary.average_rating || '-';
+                    }
+                })
+                .catch(() => {});
+        }
+        
+        // Load stats on page load and every 30 seconds
+        loadAgentStats();
+        setInterval(loadAgentStats, 30000);
+        
         renderAgents();
     </script>
 
@@ -2106,12 +2125,44 @@
                 });
             }
             
+            // Call Compliance Agent for KYC verification when entering director info
+            if (currentStep === 2) {
+                const directorName = document.getElementById('directorName').value;
+                if (directorName) {
+                    fetch('https://opencompanybot.com/api/v1/agents/kyc', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'verify_kyc',
+                            applicant_name: directorName
+                        })
+                    }).then(res => res.json()).then(data => {
+                        console.log('KYC Status:', data.result?.status);
+                    }).catch(() => {});
+                }
+            }
+            
             if (currentStep < totalSteps) {
                 currentStep++;
                 updateStepBar();
                 
-                // Update review section
+                // Call Registration Agent when reaching payment step
                 if (currentStep === 5) {
+                    const companyName = document.getElementById('companyName').value;
+                    if (companyName) {
+                        fetch('https://opencompanybot.com/api/v1/agents/register', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'register_company',
+                                country: selectedCountry,
+                                company_name: companyName
+                            })
+                        }).then(res => res.json()).then(data => {
+                            console.log('Registration Agent:', data.result);
+                        }).catch(() => {});
+                    }
+                    
                     const countryNames = {'uk': 'UK', 'sg': 'Singapore', 'hk': 'Hong Kong', 'ae': 'UAE', 'us': 'USA'};
                     document.getElementById('reviewCountry').textContent = countryNames[selectedCountry] || selectedCountry.toUpperCase();
                     document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value || '-';
@@ -2269,10 +2320,26 @@
         async function processPayment() {
             const btn = document.getElementById('payBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>Creating payment...';
+            btn.innerHTML = '<span class="spinner"></span>Crypto Agent processing...';
             
             const prices = {'uk': 149, 'sg': 400, 'hk': 300, 'ae': 600, 'us': 250};
             const amount = prices[selectedCountry] || 100;
+            
+            // Call Payment Agent first
+            try {
+                const paymentRes = await fetch('https://opencompanybot.com/api/v1/agents/payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'create_invoice',
+                        amount: amount
+                    })
+                });
+                const paymentData = await paymentRes.json();
+                console.log('Payment Agent response:', paymentData);
+            } catch(e) {
+                console.log('Payment agent not available, using fallback');
+            }
             
             try {
                 // Create payment via API
@@ -2516,10 +2583,32 @@
             messages.scrollTop = messages.scrollHeight;
             input.value = '';
             
-            setTimeout(() => {
-                messages.innerHTML += `<div style="margin-bottom: 8px;"><span style="background: var(--primary-light); color: var(--primary); padding: 8px 12px; border-radius: 12px 12px 12px 0;">Thanks for your message! Our team will respond shortly. For instant help, join our Telegram: @opencompanybot</span></div>`;
+            // Show typing indicator
+            messages.innerHTML += `<div id="typingIndicator" style="margin-bottom: 8px;"><span style="background: var(--primary-light); color: var(--primary); padding: 8px 12px; border-radius: 12px 12px 12px 0;">🤖 Emma is typing...</span></div>`;
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Call Support Agent API
+            fetch('https://opencompanybot.com/api/v1/agents/support', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'handle_ticket',
+                    ticket_id: 'CHAT-' + Date.now(),
+                    issue: msg
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const response = data.result?.response || "Thanks for your message! Our team will get back to you shortly.";
+                document.getElementById('typingIndicator').remove();
+                messages.innerHTML += `<div style="margin-bottom: 8px;"><span style="background: var(--primary-light); color: var(--primary); padding: 8px 12px; border-radius: 12px 12px 12px 0;">${response}</span></div>`;
                 messages.scrollTop = messages.scrollHeight;
-            }, 1000);
+            })
+            .catch(() => {
+                document.getElementById('typingIndicator').remove();
+                messages.innerHTML += `<div style="margin-bottom: 8px;"><span style="background: var(--primary-light); color: var(--primary); padding: 8px 12px; border-radius: 12px 12px 12px 0;">Thanks for your message! For instant help, join our Telegram: @opencompanybot</span></div>`;
+                messages.scrollTop = messages.scrollHeight;
+            });
         }
     </script>
     <!-- Live Chat Widget -->
