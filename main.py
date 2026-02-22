@@ -10,6 +10,8 @@ class Default(WorkerEntrypoint):
         path = urlparse(request.url).path
         cors = {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"}
         
+        db = getattr(self.env, "DB", None)
+        
         if request.method == "OPTIONS":
             return Response("", status=204, headers=cors)
         
@@ -37,11 +39,12 @@ class Default(WorkerEntrypoint):
             
             password_hash = hashlib.sha256(password.encode()).hexdigest()
             
+            token = secrets.token_hex(24)
+            
             return Response(json.dumps({
                 "status": "ok", 
-                "token": secrets.token_hex(24), 
-                "user": {"email": email},
-                "note": "D1 configured, data will persist"
+                "token": token, 
+                "user": {"email": email, "name": name}
             }), headers=cors)
         
         if path == "/api/v1/auth/login" and request.method == "POST":
@@ -54,9 +57,11 @@ class Default(WorkerEntrypoint):
             password = body.get("password", "")
             password_hash = hashlib.sha256(password.encode()).hexdigest()
             
+            token = secrets.token_hex(24)
+            
             return Response(json.dumps({
                 "status": "ok", 
-                "token": secrets.token_hex(24), 
+                "token": token, 
                 "user": {"email": email}
             }), headers=cors)
         
@@ -64,6 +69,8 @@ class Default(WorkerEntrypoint):
             auth = request.headers.get("Authorization", "")
             if not auth.startswith("Bearer "):
                 return Response(json.dumps({"error": "Unauthorized"}), status=401, headers=cors)
+            
+            token = auth.replace("Bearer ", "")
             
             return Response(json.dumps({"user": {"email": "demo@example.com"}}), headers=cors)
         
