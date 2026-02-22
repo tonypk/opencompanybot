@@ -979,6 +979,141 @@
         </div>
     </section>
 
+    <!-- Why Choose Us -->
+    <section class="features" id="why-choose-us" style="background: var(--bg-secondary);">
+        <div class="container">
+            <h2 class="section-title">为什么选择我们？</h2>
+            <p class="section-subtitle">与传统服务商对比</p>
+            
+            <div style="overflow-x: auto; margin-top: 40px;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border);">
+                            <th style="text-align: left; padding: 16px; font-weight: 600;">功能</th>
+                            <th style="text-align: center; padding: 16px; font-weight: 600; color: var(--primary);">OpenCompanyBot</th>
+                            <th style="text-align: center; padding: 16px; font-weight: 600; color: var(--text-muted);">传统代理</th>
+                            <th style="text-align: center; padding: 16px; font-weight: 600; color: var(--text-muted);">DIY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">AI驱动流程</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">USDT支付</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--text-muted);">⚠️</td>
+                            <td style="text-align: center; padding: 16px; color: var(--text-muted);">⚠️</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">MCP协议支持</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">AI代理拥有公司</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">24/7 AI助手</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--text-muted);">⚠️</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">虚拟地址</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--accent); font-size: 20px;">✅</td>
+                            <td style="text-align: center; padding: 16px; color: var(--error);">❌</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 16px;">处理时间</td>
+                            <td style="text-align: center; padding: 16px; color: var(--primary); font-weight: 600;">1-5天</td>
+                            <td style="text-align: center; padding: 16px;">5-14天</td>
+                            <td style="text-align: center; padding: 16px;">7-21天</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 16px;">起价</td>
+                            <td style="text-align: center; padding: 16px; color: var(--primary); font-weight: 600;">£50</td>
+                            <td style="text-align: center; padding: 16px;">£200+</td>
+                            <td style="text-align: center; padding: 16px;">£50+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section class="features" id="api" style="background: var(--bg);">
+        <div class="container">
+            <h2 class="section-title">为开发者打造</h2>
+            <p class="section-subtitle">通过强大的API将公司注册集成到您的应用中</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 48px; align-items: start;">
+                <div>
+                    <div style="background: #1e1e1e; border-radius: var(--radius-lg); padding: 24px; font-family: 'Monaco', 'Menlo', monospace; font-size: 13px; overflow-x: auto; color: #d4d4d4;">
+                        <div style="color: #6a9955; margin-bottom: 12px;">// 通过API注册公司</div>
+                        <div style="color: #c586c0;">curl</div> <div style="color: #ce9178;">-X POST</div> <div style="color: #9cdcfe;">"https://api.opencompanybot.com/v1/companies"</div><br>
+                        <div style="color: #9cdcfe;">  -H</div> <div style="color: #ce9178;">"Authorization: Bearer YOUR_API_KEY"</div><br>
+                        <div style="color: #9cdcfe;">  -H</div> <div style="color: #ce9178;">"Content-Type: application/json"</div><br>
+                        <div style="color: #9cdcfe;">  -d</div> <div style="color: #ce9178;">'{"country": "uk", "type": "ltd"}'</div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <h4 style="font-size: 16px; margin-bottom: 12px;">API 特性</h4>
+                        <ul style="list-style: none; color: var(--text-secondary);">
+                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--accent);">✓</span> RESTful API 与 JSON 响应
+                            </li>
+                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--accent);">✓</span> MCP 协议支持AI代理
+                            </li>
+                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--accent);">✓</span> Webhook 通知
+                            </li>
+                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--accent);">✓</span> 速率限制与认证
+                            </li>
+                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 8px;">
+                                <span style="color: var(--accent);">✓</span> 99.9% 可用性SLA
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px;">
+                        <h4 style="font-size: 18px; margin-bottom: 16px;">可用的MCP工具</h4>
+                        <div style="display: grid; gap: 12px;">
+                            <div style="background: var(--bg); padding: 16px; border-radius: var(--radius);">
+                                <code style="color: var(--primary); font-size: 14px;">register_company</code>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">在任何支持的国家注册公司</p>
+                            </div>
+                            <div style="background: var(--bg); padding: 16px; border-radius: var(--radius);">
+                                <code style="color: var(--primary); font-size: 14px;">check_company_status</code>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">实时检查公司注册状态</p>
+                            </div>
+                            <div style="background: var(--bg); padding: 16px; border-radius: var(--radius);">
+                                <code style="color: var(--primary); font-size: 14px;">search_company_name</code>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">注册前检查公司名称可用性</p>
+                            </div>
+                            <div style="background: var(--bg); padding: 16px; border-radius: var(--radius);">
+                                <code style="color: var(--primary); font-size: 14px;">get_requirements</code>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">获取任何国家的注册要求</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="alert('API文档即将推出！')">查看完整文档 →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Testimonials -->
     <section class="features" id="testimonials" style="background: var(--bg);">
         <div class="container">
