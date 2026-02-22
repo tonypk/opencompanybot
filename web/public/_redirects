@@ -1,4 +1,3 @@
 # Cloudflare Pages redirects
-/zh /zh.html 200
-/zh.html /zh.html 200
+/zh/ /zh.html 200
 /* /index.html 200
