@@ -1406,6 +1406,65 @@
         </div>
     </section>
 
+    <!-- AI Agents Team Section -->
+    <section class="features" id="ai-agents" style="background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">🤖 Meet Our AI Team</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.7);">The autonomous agents running OpenCompanyBot 24/7</p>
+            
+            <div id="agentCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 48px;"></div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <div id="teamSummary" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-lg); padding: 24px; display: inline-block;">
+                    <div style="color: white; font-size: 14px; margin-bottom: 8px;">TEAM STATS</div>
+                    <div style="display: flex; gap: 32px; justify-content: center;">
+                        <div><div style="font-size: 32px; font-weight: 700; color: var(--accent);" id="totalTasks">-</div><div style="font-size: 12px; color: rgba(255,255,255,0.6);">Tasks Done</div></div>
+                        <div><div style="font-size: 32px; font-weight: 700; color: var(--primary);" id="activeAgents">-</div><div style="font-size: 12px; color: rgba(255,255,255,0.6);">Active</div></div>
+                        <div><div style="font-size: 32px; font-weight: 700; color: #f59e0b;" id="avgRating">-</div><div style="font-size: 12px; color: rgba(255,255,255,0.6);">Rating</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const agents = [
+            {name: "Athena", role: "ceo", avatar: "👑", specialty: "Strategic", description: "AI CEO overseeing all operations and coordinating agents.", status: "active", tasks_completed: 1247, rating: 5.0},
+            {name: "Marcus", role: "sales", avatar: "💼", specialty: "Sales", description: "AI Sales handling inquiries and converting leads.", status: "active", tasks_completed: 3892, rating: 4.9},
+            {name: "Emma", role: "support", avatar: "🎧", specialty: "Support", description: "AI Support resolving issues and ensuring satisfaction.", status: "active", tasks_completed: 5621, rating: 4.8},
+            {name: "Victor", role: "registration", avatar: "📋", specialty: "Registration", description: "AI specialist for company registration workflows.", status: "busy", tasks_completed: 2156, rating: 4.9},
+            {name: "Clark", role: "compliance", avatar: "🛡️", specialty: "Compliance", description: "AI compliance officer for KYC and AML checks.", status: "active", tasks_completed: 4523, rating: 4.7},
+            {name: "Crypto", role: "payment", avatar: "₿", specialty: "Payments", description: "AI specialist for USDT transactions.", status: "active", tasks_completed: 3891, rating: 4.9},
+            {name: "Spark", role: "marketing", avatar: "📢", specialty: "Marketing", description: "AI marketing for growth and engagement.", status: "active", tasks_completed: 1245, rating: 4.8}
+        ];
+        
+        function renderAgents() {
+            const container = document.getElementById('agentCards');
+            container.innerHTML = agents.map(agent => `
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); padding: 24px; transition: all 0.3s;">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                        <div style="width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary), #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">${agent.avatar}</div>
+                        <div><div style="font-weight: 600; color: white; font-size: 18px;">${agent.name}</div><div style="font-size: 12px; color: var(--accent); text-transform: uppercase;">${agent.role}</div></div>
+                        <div style="margin-left: auto;"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${agent.status === 'active' ? 'var(--accent)' : '#f59e0b'};"></span></div>
+                    </div>
+                    <div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 12px;">${agent.description}</div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="text-align: center;"><div style="font-weight: 600; color: white;">${agent.tasks_completed.toLocaleString()}</div><div style="font-size: 11px; color: rgba(255,255,255,0.5);">Tasks</div></div>
+                        <div style="text-align: center;"><div style="font-weight: 600; color: #f59e0b;">⭐ ${agent.rating}</div><div style="font-size: 11px; color: rgba(255,255,255,0.5);">Rating</div></div>
+                        <div style="text-align: center;"><div style="font-weight: 600; color: var(--primary);">${agent.specialty}</div><div style="font-size: 11px; color: rgba(255,255,255,0.5);">Specialty</div></div>
+                    </div>
+                </div>
+            `).join('');
+            const totalTasks = agents.reduce((sum, a) => sum + a.tasks_completed, 0);
+            const activeAgents = agents.filter(a => a.status === 'active').length;
+            const avgRating = (agents.reduce((sum, a) => sum + a.rating, 0) / agents.length).toFixed(1);
+            document.getElementById('totalTasks').textContent = totalTasks.toLocaleString();
+            document.getElementById('activeAgents').textContent = activeAgents;
+            document.getElementById('avgRating').textContent = avgRating;
+        }
+        renderAgents();
+    </script>
+
     <!-- As Seen In / Press -->
     <section style="padding: 40px 0; background: var(--bg);">
         <div class="container">

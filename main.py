@@ -301,6 +301,105 @@ class Default(WorkerEntrypoint):
                 ]
             })
         
+        # ============ AI Agents Team API ============
+        if path == "/api/v1/agents" and request.method == "GET":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            return success_response({
+                "team": agent_team.get_team_status(),
+                "summary": agent_team.get_team_summary()
+            })
+        
+        if path == "/api/v1/agents/ceo" and request.method == "POST":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            task = AgentTask(
+                task_id=f"TASK-{secrets.token_hex(4)}",
+                agent_role=AgentRole.CEO,
+                description="analyze_performance"
+            )
+            result = await agent_team.process_task(AgentRole.CEO, task)
+            return success_response({"result": result})
+        
+        if path == "/api/v1/agents/sales" and request.method == "POST":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            try:
+                body = await request.json()
+            except:
+                body = {}
+            
+            action = body.get("action", "handle_inquiry")
+            task = AgentTask(
+                task_id=f"TASK-{secrets.token_hex(4)}",
+                agent_role=AgentRole.SALES,
+                description=f"{action}_lead" if action == "qualify" else "handle_inquiry",
+                metadata=body
+            )
+            result = await agent_team.process_task(AgentRole.SALES, task)
+            return success_response({"result": result})
+        
+        if path == "/api/v1/agents/support" and request.method == "POST":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            try:
+                body = await request.json()
+            except:
+                body = {}
+            
+            task = AgentTask(
+                task_id=f"TASK-{secrets.token_hex(4)}",
+                agent_role=AgentRole.SUPPORT,
+                description=body.get("type", "faq"),
+                metadata=body
+            )
+            result = await agent_team.process_task(AgentRole.SUPPORT, task)
+            return success_response({"result": result})
+        
+        if path == "/api/v1/agents/register" and request.method == "POST":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            try:
+                body = await request.json()
+            except:
+                body = {}
+            
+            task = AgentTask(
+                task_id=f"TASK-{secrets.token_hex(4)}",
+                agent_role=AgentRole.REGISTRATION,
+                description="register_company",
+                metadata=body
+            )
+            result = await agent_team.process_task(AgentRole.REGISTRATION, task)
+            return success_response({"result": result})
+        
+        if path == "/api/v1/agents/kyc" and request.method == "POST":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            try:
+                body = await request.json()
+            except:
+                body = {}
+            
+            task = AgentTask(
+                task_id=f"TASK-{secrets.token_hex(4)}",
+                agent_role=AgentRole.COMPLIANCE,
+                description="verify_kyc",
+                metadata=body
+            )
+            result = await agent_team.process_task(AgentRole.COMPLIANCE, task)
+            return success_response({"result": result})
+        
+        if path == "/api/v1/agents/payment" and request.method == "POST":
+            from app.agents.team import agent_team, AgentRole, AgentTask
+            try:
+                body = await request.json()
+            except:
+                body = {}
+            
+            task = AgentTask(
+                task_id=f"TASK-{secrets.token_hex(4)}",
+                agent_role=AgentRole.PAYMENT,
+                description=body.get("action", "process_payment"),
+                metadata=body
+            )
+            result = await agent_team.process_task(AgentRole.PAYMENT, task)
+            return success_response({"result": result})
+        
         # ============ Auth API ============
         if path == "/api/v1/auth/register" and request.method == "POST":
             try:
