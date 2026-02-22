@@ -886,29 +886,29 @@
                     <div class="country-price">From £50 + £50 CH</div>
                     <span class="country-status available">✓ Available</span>
                 </div>
-                <div class="country-card" onclick="showComingSoon()">
+                <div class="country-card available" onclick="selectCountry('sg')">
                     <div class="country-flag">🇸🇬</div>
                     <div class="country-name">Singapore</div>
                     <div class="country-price">From $300</div>
-                    <span class="country-status soon">Coming Soon</span>
+                    <span class="country-status available">✓ Available</span>
                 </div>
-                <div class="country-card" onclick="showComingSoon()">
+                <div class="country-card available" onclick="selectCountry('hk')">
                     <div class="country-flag">🇭🇰</div>
                     <div class="country-name">Hong Kong</div>
                     <div class="country-price">From $200</div>
-                    <span class="country-status soon">Coming Soon</span>
+                    <span class="country-status available">✓ Available</span>
                 </div>
-                <div class="country-card" onclick="showComingSoon()">
+                <div class="country-card available" onclick="selectCountry('ae')">
                     <div class="country-flag">🇦🇪</div>
                     <div class="country-name">UAE</div>
                     <div class="country-price">From $500</div>
-                    <span class="country-status soon">Coming Soon</span>
+                    <span class="country-status available">✓ Available</span>
                 </div>
-                <div class="country-card" onclick="showComingSoon()">
+                <div class="country-card available" onclick="selectCountry('us')">
                     <div class="country-flag">🇺🇸</div>
                     <div class="country-name">USA</div>
                     <div class="country-price">From $150</div>
-                    <span class="country-status soon">Coming Soon</span>
+                    <span class="country-status available">✓ Available</span>
                 </div>
             </div>
         </div>
@@ -1364,13 +1364,9 @@
             document.querySelectorAll('.country-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const country = btn.dataset.country;
-                    if (country === 'uk') {
-                        document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        selectedCountry = 'uk';
-                    } else {
-                        showComingSoon();
-                    }
+                    document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedCountry = country;
                 });
             });
         }
@@ -1380,10 +1376,6 @@
         }
         
         function selectCountry(country) {
-            if (country !== 'uk') {
-                showComingSoon();
-                return;
-            }
             selectedCountry = country;
             startRegistration();
         }
@@ -1751,8 +1743,15 @@
         
         // Modal Functions
         function openAuthModal(tab = 'login') {
-            document.getElementById('authModal').classList.add('active');
-            showTab(tab);
+            console.log('Opening auth modal, tab:', tab);
+            const modal = document.getElementById('authModal');
+            if (modal) {
+                modal.classList.add('active');
+                showTab(tab);
+            } else {
+                console.error('Modal not found!');
+                alert('Auth modal not found');
+            }
         }
         
         function closeModal() {
