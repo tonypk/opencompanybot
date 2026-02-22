@@ -18,9 +18,23 @@ class Router:
         from urllib.parse import urlparse
         path = urlparse(request.url).path
         key = (request.method, path)
+        
+        cors_headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+        }
+        
+        if request.method == "OPTIONS":
+            return Response("", status=204, headers=cors_headers)
+        
         if key in self.routes:
-            return await self.routes[key](request)
-        return Response("Not Found", status=404)
+            response = await self.routes[key](request)
+            if hasattr(response, 'headers'):
+                for k, v in cors_headers.items():
+                    response.headers[k] = v
+            return response
+        return Response("Not Found", status=404, headers=cors_headers)
 
 
 router = Router()
