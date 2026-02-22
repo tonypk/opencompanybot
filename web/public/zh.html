@@ -7,30 +7,45 @@
     <meta name="description" content="全球首个让AI代理拥有公司的平台。AI可以作为法人实体注册公司，MCP协议支持，全球USDT支付。">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #DBEAFE;
+            --accent: #10B981;
+            --accent-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
             --bg: #0a0a0a;
             --bg-secondary: #141414;
+            --bg-tertiary: #1f1f1f;
             --text: #ffffff;
             --text-secondary: #a1a1a1;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
+            --text-muted: #6b7280;
             --border: #262626;
+            --border-hover: #404040;
+            --shadow: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
         }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: inherit; }
 
         .container {
             max-width: 1200px;
@@ -38,13 +53,13 @@
             padding: 0 24px;
         }
 
+        /* Header */
         header {
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
             z-index: 100;
         }
 
@@ -52,121 +67,79 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 72px;
         }
 
         .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text);
-            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text);
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 18px;
         }
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--text);
-        }
-
-        .lang-switch {
+        .country-nav {
             display: flex;
             gap: 8px;
         }
 
-        .lang-switch a {
-            color: var(--text-secondary);
-            text-decoration: none;
+        .country-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: transparent;
             font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .lang-switch a.active {
-            background: var(--bg-secondary);
-            color: var(--text);
-        }
-
-        .hero {
-            padding: 120px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent), #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 16px;
             font-weight: 500;
-            text-decoration: none;
+            color: var(--text-secondary);
             transition: all 0.2s;
             cursor: pointer;
-            border: none;
         }
 
-        .btn-primary {
-            background: var(--accent);
+        .country-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .country-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
             color: white;
         }
 
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover { color: var(--text); }
 
         .btn-secondary {
             background: var(--bg-secondary);
@@ -174,295 +147,1278 @@
             border: 1px solid var(--border);
         }
 
-        .btn-secondary:hover {
-            background: var(--border);
+        .btn-secondary:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
-        .features {
-            padding: 80px 0;
-            background: var(--bg-secondary);
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        .user-menu {
+            display: none;
+            align-items: center;
+            gap: 12px;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 48px;
-        }
+        .user-menu.show { display: flex; }
 
-        .feature-card {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            transition: border-color 0.2s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 10px;
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-light);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg) 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
             margin-bottom: 16px;
         }
 
-        .feature-card h3 {
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
             font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 64px;
+        }
+
+        .hero-btns .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+        }
+
+        /* Countries Grid */
+        .countries { padding: 40px 0; }
+
+        .section-title {
+            font-size: 28px;
             font-weight: 600;
+            text-align: center;
             margin-bottom: 8px;
         }
 
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .api-preview {
-            padding: 80px 0;
-        }
-
-        .code-block {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            margin-top: 32px;
-            overflow-x: auto;
-        }
-
-        .code-block pre {
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--text-secondary);
-        }
-
-        .code-block .keyword {
-            color: #c792ea;
-        }
-
-        .code-block .string {
-            color: #c3e88d;
-        }
-
-        .code-block .comment {
-            color: #546e7a;
-        }
-
-        footer {
-            padding: 40px 0;
-            border-top: 1px solid var(--border);
+        .section-subtitle {
             text-align: center;
             color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .country-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .country-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .country-card.available { border-color: var(--accent); }
+
+        .country-flag { font-size: 40px; margin-bottom: 12px; }
+
+        .country-name { font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+
+        .country-price { color: var(--text-secondary); font-size: 14px; margin-bottom: 12px; }
+
+        .country-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .country-status.available {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        /* Country Detail Section */
+        .country-detail {
+            display: none;
+            padding: 60px 0;
+            background: var(--bg-secondary);
+        }
+
+        .country-detail.active { display: block; }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .detail-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .detail-card h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .detail-card ul {
+            list-style: none;
+            color: var(--text-secondary);
+        }
+
+        .detail-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-card li:last-child { border-bottom: none; }
+
+        .detail-card .label { color: var(--text-secondary); }
+        .detail-card .value { color: var(--text); font-weight: 500; }
+
+        /* Features */
+        .features { padding: 80px 0; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+
+        .feature-card p { color: var(--text-secondary); font-size: 14px; }
+
+        /* AI Section */
+        .ai-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+        }
+
+        .ai-section .section-title { color: white; }
+        .ai-section .section-subtitle { color: rgba(255,255,255,0.7); }
+
+        .ai-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+        }
+
+        .ai-card h3 { color: white; margin-bottom: 8px; }
+        .ai-card p { color: rgba(255,255,255,0.7); font-size: 14px; }
+
+        /* Pricing */
+        .pricing { padding: 80px 0; }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card:hover { border-color: var(--primary); }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.1) 0%, var(--bg-secondary) 30%);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .pricing-name { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+
+        .pricing-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .pricing-price span {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-desc { color: var(--text-secondary); margin-bottom: 24px; }
+
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 24px; }
+
+        .pricing-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--bg);
+            border-radius: var(--radius-xl);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 { font-size: 20px; font-weight: 600; }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .modal-body { padding: 24px; }
+
+        /* Forms */
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 15px;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-error { color: var(--error); font-size: 13px; margin-top: 6px; }
+
+        /* Steps */
+        .steps { margin-bottom: 24px; }
+
+        .step-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .step {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .step.active { background: var(--primary); }
+
+        .step-label { text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+        .step-label span { display: inline-block; padding: 4px 12px; background: var(--bg-secondary); border-radius: var(--radius); }
+        .step-label span.active { background: var(--primary); color: white; }
+
+        .country-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .country-option:hover { border-color: var(--primary); }
+        .country-option.active { border-color: var(--primary); background: var(--primary-light); }
+
+        /* Alert */
+        .alert { padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px; }
+        .alert-success { background: var(--accent-light); color: #065F46; }
+        .alert-error { background: var(--error-light); color: #991B1B; }
+        .alert-loading { background: var(--primary-light); color: var(--primary); display: flex; align-items: center; gap: 8px; }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        .tab-btn:hover { color: var(--text); background: var(--bg-secondary); }
+        .tab-btn.active { background: var(--primary); color: white; }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 48px 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-col h4 { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .footer-col a:hover { color: white; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 24px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+
+        /* Hide */
+        .hidden { display: none !important; }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            .hero p {
-                font-size: 16px;
-            }
-            nav {
-                gap: 16px;
-            }
-            .cta-group {
-                flex-direction: column;
-            }
+            .hero h1 { font-size: 32px; }
+            .country-nav { display: none; }
+            .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <a href="/zh" class="logo">
+            <a href="/zh/" class="logo">
                 <div class="logo-icon">🤖</div>
                 OpenCompanyBot
             </a>
-            <nav>
-                <a href="#features">功能</a>
-                <a href="#api">API</a>
-                <a href="#pricing">价格</a>
-                <div class="lang-switch">
-                    <a href="/">EN</a>
-                    <a href="/zh" class="active">中文</a>
-                </div>
+            
+            <nav class="country-nav">
+                <button class="country-btn active" data-country="uk">🇬🇧 UK</button>
+                <button class="country-btn" data-country="sg">🇸🇬 SG</button>
+                <button class="country-btn" data-country="hk">🇭🇰 HK</button>
+                <button class="country-btn" data-country="ae">🇦🇪 UAE</button>
+                <button class="country-btn" data-country="us">🇺🇸 USA</button>
             </nav>
+            
+            <div class="header-actions">
+                <a href="/" class="btn btn-ghost">EN</a>
+                <button class="btn btn-ghost" onclick="openAuthModal()">登录</button>
+                <button class="btn btn-primary" onclick="openAuthModal('register')">立即注册</button>
+                <div class="user-menu" id="userMenu">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <button class="btn btn-ghost" onclick="showDashboard()">我的订单</button>
+                    <button class="btn btn-secondary" onclick="logout()">退出</button>
+                </div>
+            </div>
         </div>
     </header>
 
+    <!-- Hero -->
     <section class="hero">
         <div class="container">
             <h1>让AI拥有<br><span>自己的公司</span></h1>
             <p>全球首个让AI代理拥有并运营公司的平台。让你的AI成为合法实体。支持多国公司注册，USDT支付，即时处理。</p>
-            <div class="cta-group">
-                <a href="/" class="btn btn-primary">立即注册</a>
-                <a href="#features" class="btn btn-secondary">了解更多</a>
+            <div class="hero-btns">
+                <button class="btn btn-primary" onclick="startRegistration()">开始注册</button>
+                <button class="btn btn-secondary" onclick="scrollToFeatures()">了解更多</button>
             </div>
         </div>
     </section>
 
-    <section class="features" style="background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);">
+    <!-- Countries -->
+    <section class="countries" id="countries">
         <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; color: white; margin-bottom: 16px;">🤖 AI可以拥有公司</h2>
-            <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 48px;">未来已来。让您的AI代理成为公司的合法所有者。</p>
-            <div class="features-grid">
-                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <h2 class="section-title">选择注册国家</h2>
+            <p class="section-subtitle">我们支持以下国家的公司注册</p>
+            
+            <div class="countries-grid">
+                <div class="country-card available" onclick="selectCountry('uk')">
+                    <div class="country-flag">🇬🇧</div>
+                    <div class="country-name">英国 (UK)</div>
+                    <div class="country-price">从 £50 起</div>
+                    <span class="country-status available">✓ 可用</span>
+                </div>
+                <div class="country-card available" onclick="selectCountry('sg')">
+                    <div class="country-flag">🇸🇬</div>
+                    <div class="country-name">新加坡 (SG)</div>
+                    <div class="country-price">从 $300 起</div>
+                    <span class="country-status available">✓ 可用</span>
+                </div>
+                <div class="country-card available" onclick="selectCountry('hk')">
+                    <div class="country-flag">🇭🇰</div>
+                    <div class="country-name">香港 (HK)</div>
+                    <div class="country-price">从 $200 起</div>
+                    <span class="country-status available">✓ 可用</span>
+                </div>
+                <div class="country-card available" onclick="selectCountry('ae')">
+                    <div class="country-flag">🇦🇪</div>
+                    <div class="country-name">阿联酋 (UAE)</div>
+                    <div class="country-price">从 $500 起</div>
+                    <span class="country-status available">✓ 可用</span>
+                </div>
+                <div class="country-card available" onclick="selectCountry('us')">
+                    <div class="country-flag">🇺🇸</div>
+                    <div class="country-name">美国 (USA)</div>
+                    <div class="country-price">从 $150 起</div>
+                    <span class="country-status available">✓ 可用</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Country Details -->
+    <section class="country-detail" id="countryDetail">
+        <div class="container">
+            <h2 class="section-title" id="detailTitle">英国公司注册</h2>
+            <p class="section-subtitle" id="detailSubtitle">了解注册要求、流程和时间</p>
+            
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <h3>📋 注册要求</h3>
+                    <ul id="reqList">
+                        <li><span class="label">至少一名董事</span><span class="value">✓ 需要</span></li>
+                        <li><span class="label">至少一名股东</span><span class="value">✓ 需要</span></li>
+                        <li><span class="label">注册地址</span><span class="value">✓ 需要</span></li>
+                        <li><span class="label">最低资本</span><span class="value">£1</span></li>
+                        <li><span class="label">成立时间</span><span class="value">3-5工作日</span></li>
+                    </ul>
+                </div>
+                <div class="detail-card">
+                    <h3>💰 费用明细</h3>
+                    <ul id="feeList">
+                        <li><span class="label">政府注册费</span><span class="value">£50</span></li>
+                        <li><span class="label">我们的服务费</span><span class="value">£50起</span></li>
+                        <li><span class="label">虚拟地址</span><span class="value">£50/年</span></li>
+                        <li><span class="label">公司秘书</span><span class="value">£120/年</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 32px;">
+                <button class="btn btn-primary" onclick="startRegistration()">立即注册</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Section -->
+    <section class="ai-section">
+        <div class="container">
+            <h2 class="section-title">🤖 AI可以拥有公司</h2>
+            <p class="section-subtitle">未来已来。让您的AI代理成为公司的合法所有者。</p>
+            
+            <div class="features-grid" style="margin-top: 48px;">
+                <div class="ai-card">
                     <div style="font-size: 40px; margin-bottom: 16px;">🧠</div>
-                    <h3 style="color: white;">AI作为法人实体</h3>
-                    <p style="color: rgba(255,255,255,0.7);">注册AI代理担任董事和股东的公司。迈向自主AI商业的第一步。</p>
+                    <h3>AI作为法人实体</h3>
+                    <p>注册AI代理担任董事和股东的公司。迈向自主AI商业的第一步。</p>
                 </div>
-                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="ai-card">
                     <div style="font-size: 40px; margin-bottom: 16px;">🔗</div>
-                    <h3 style="color: white;">MCP协议集成</h3>
-                    <p style="color: rgba(255,255,255,0.7);">完整的MCP协议支持。您的AI可以通过API编程管理公司。</p>
+                    <h3>MCP协议集成</h3>
+                    <p>完整的MCP协议支持。您的AI可以通过API编程管理公司。</p>
                 </div>
-                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="ai-card">
                     <div style="font-size: 40px; margin-bottom: 16px;">💰</div>
-                    <h3 style="color: white;">自主财务管理</h3>
-                    <p style="color: rgba(255,255,255,0.7);">AI可以用USDT持有公司资金，独立进行支付和财务管理。</p>
+                    <h3>自主财务管理</h3>
+                    <p>AI可以用USDT持有公司资金，独立进行支付和财务管理。</p>
                 </div>
-                <div class="feature-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="ai-card">
                     <div style="font-size: 40px; margin-bottom: 16px;">🌐</div>
-                    <h3 style="color: white;">全球布局</h3>
-                    <p style="color: rgba(255,255,255,0.7);">在英国、新加坡、香港、阿联酋、美国建立AI公司，全球扩张。</p>
+                    <h3>全球布局</h3>
+                    <p>在英国、新加坡、香港、阿联酋、美国建立AI公司，全球扩张。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="features" id="countries">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px;">选择注册国家</h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 48px;">我们支持以下国家的公司注册</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div style="font-size: 40px; margin-bottom: 12px;">🇬🇧</div>
-                    <h3>英国 (UK)</h3>
-                    <p>从 £50 起</p>
-                    <span style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.1); color: #10B981; border-radius: 20px; font-size: 12px; margin-top: 8px;">✓ 可用</span>
-                </div>
-                <div class="feature-card">
-                    <div style="font-size: 40px; margin-bottom: 12px;">🇸🇬</div>
-                    <h3>新加坡 (SG)</h3>
-                    <p>从 $300 起</p>
-                    <span style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.1); color: #10B981; border-radius: 20px; font-size: 12px; margin-top: 8px;">✓ 可用</span>
-                </div>
-                <div class="feature-card">
-                    <div style="font-size: 40px; margin-bottom: 12px;">🇭🇰</div>
-                    <h3>香港 (HK)</h3>
-                    <p>从 $200 起</p>
-                    <span style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.1); color: #10B981; border-radius: 20px; font-size: 12px; margin-top: 8px;">✓ 可用</span>
-                </div>
-                <div class="feature-card">
-                    <div style="font-size: 40px; margin-bottom: 12px;">🇦🇪</div>
-                    <h3>阿联酋 (UAE)</h3>
-                    <p>从 $500 起</p>
-                    <span style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.1); color: #10B981; border-radius: 20px; font-size: 12px; margin-top: 8px;">✓ 可用</span>
-                </div>
-                <div class="feature-card">
-                    <div style="font-size: 40px; margin-bottom: 12px;">🇺🇸</div>
-                    <h3>美国 (USA)</h3>
-                    <p>从 $150 起</p>
-                    <span style="display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.1); color: #10B981; border-radius: 20px; font-size: 12px; margin-top: 8px;">✓ 可用</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Features -->
     <section class="features" id="features">
         <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700;">为什么选择我们？</h2>
+            <h2 class="section-title">为什么选择我们？</h2>
+            <p class="section-subtitle">公司注册所需的一切</p>
+            
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3>即时注册</h3>
-                    <p>直连英国Companies House API。公司注册仅需几分钟，而非几天。</p>
+                    <h3>快速处理</h3>
+                    <p>3-5个工作日内完成公司注册</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
-                    <h3>MCP协议支持</h3>
-                    <p>专为AI代理设计。完整的MCP协议支持，实现自动化公司注册工作流。</p>
+                    <h3>AI助手</h3>
+                    <p>注册流程全程智能指导</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">₿</div>
+                    <div class="feature-icon">💳</div>
                     <h3>USDT支付</h3>
-                    <p>支持USDT (ERC20/TRC20) 全球收款。无需繁琐的银行流程。</p>
+                    <p>安全的加密货币支付，即时确认</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
+                    <div class="feature-icon">🌍</div>
                     <h3>多国支持</h3>
-                    <p>支持英国、新加坡、香港、阿联酋、美国公司注册。一个API全搞定。</p>
+                    <p>支持英国、新加坡、香港、阿联酋、美国注册</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🏢</div>
+                    <div class="feature-icon">📋</div>
                     <h3>虚拟地址</h3>
-                    <p>提供注册地址服务，无需当地实体地址即可注册公司。</p>
+                    <p>提供专业注册办公地址</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>安全合规</h3>
+                    <p>完全符合当地法规和数据保护</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="api-preview" id="api">
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
         <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px;">简洁API</h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px;">仅需几行代码即可注册全球公司</p>
-            <div class="code-block">
-<pre><span class="keyword">curl</span> -X POST <span class="string">"https://api.opencompanybot.com/api/v1/companies/incorporate"</span> \
-  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
-  -H <span class="string">"Content-Type: application/json"</span> \
-  -d <span class="string">'{
-    "country": "uk",  <span class="comment"># uk, sg, hk, ae, us</span>
-    "company_name": "Acme Ltd",
-    "company_type": "ltd",
-    "directors": [...],
-    "shareholders": [...]
-  }'</span></pre>
-            </div>
-        </div>
-    </section>
-
-    <section class="features" id="pricing">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 48px;">透明定价</h2>
-            <div class="features-grid" style="max-width: 900px; margin: 0 auto;">
-                <div class="feature-card" style="text-align: center;">
-                    <h3>标准版</h3>
-                    <p style="font-size: 32px; font-weight: 700; margin: 16px 0;">£50<span style="font-size: 16px; color: var(--text-secondary);">起</span></p>
-                    <p>公司注册</p>
-                    <p>标准注册地址</p>
-                    <p>电子文档</p>
-                    <p>邮件支持</p>
-                    <a href="/" class="btn btn-primary" style="margin-top: 24px; width: 100%;">立即开始</a>
+            <h2 class="section-title">简单定价</h2>
+            <p class="section-subtitle">选择适合您的套餐</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">标准版</div>
+                    <div class="pricing-price">£50 <span>+ £50 政府费</span></div>
+                    <div class="pricing-desc">适合基本公司注册</div>
+                    <ul class="pricing-features">
+                        <li>公司注册</li>
+                        <li>标准注册地址</li>
+                        <li>电子文档</li>
+                        <li>邮件支持</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="selectPackage('standard')" style="width: 100%;">选择</button>
                 </div>
-                <div class="feature-card" style="text-align: center; border-color: var(--accent);">
-                    <h3>高级版</h3>
-                    <p style="font-size: 32px; font-weight: 700; margin: 16px 0;">£99<span style="font-size: 16px; color: var(--text-secondary);">起</span></p>
-                    <p>公司注册</p>
-                    <p>虚拟办公地址</p>
-                    <p>优先处理</p>
-                    <p>一年注册地址</p>
-                    <p>文件快递</p>
-                    <p>优先支持</p>
-                    <a href="/" class="btn btn-primary" style="margin-top: 24px; width: 100%;">立即开始</a>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">最受欢迎</div>
+                    <div class="pricing-name">高级版</div>
+                    <div class="pricing-price">£99 <span>+ £50 政府费</span></div>
+                    <div class="pricing-desc">包含所有附加服务</div>
+                    <ul class="pricing-features">
+                        <li>公司注册</li>
+                        <li>虚拟办公地址</li>
+                        <li>优先处理</li>
+                        <li>首年注册地址</li>
+                        <li>文件快递</li>
+                        <li>优先支持</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="selectPackage('premium')" style="width: 100%;">选择</button>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>© 2026 OpenCompanyBot。为全球创业社区而生。</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>产品</h4>
+                    <a href="#pricing">价格</a>
+                    <a href="#features">功能</a>
+                    <a href="#">API文档</a>
+                </div>
+                <div class="footer-col">
+                    <h4>公司</h4>
+                    <a href="#">关于我们</a>
+                    <a href="#">联系</a>
+                    <a href="#">招聘</a>
+                </div>
+                <div class="footer-col">
+                    <h4>法律</h4>
+                    <a href="#">隐私政策</a>
+                    <a href="#">服务条款</a>
+                    <a href="#">Cookie政策</a>
+                </div>
+                <div class="footer-col">
+                    <h4>支持</h4>
+                    <a href="#">帮助中心</a>
+                    <a href="#">状态</a>
+                    <a href="#">联系我们</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 OpenCompanyBot. 保留所有权利。
+            </div>
         </div>
     </footer>
+
+    <!-- Registration Modal -->
+    <div class="modal" id="regModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>注册公司</h3>
+                <button class="modal-close" onclick="closeRegModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="steps">
+                    <div class="step-bar">
+                        <div class="step active" data-step="1"></div>
+                        <div class="step" data-step="2"></div>
+                        <div class="step" data-step="3"></div>
+                        <div class="step" data-step="4"></div>
+                        <div class="step" data-step="5"></div>
+                        <div class="step" data-step="6"></div>
+                    </div>
+                    <div class="step-label">
+                        <span class="active" id="stepLabel1">国家</span>
+                        <span id="stepLabel2">公司</span>
+                        <span id="stepLabel3">董事</span>
+                        <span id="stepLabel4">股东</span>
+                        <span id="stepLabel5">支付</span>
+                        <span id="stepLabel6">完成</span>
+                    </div>
+                </div>
+
+                <div id="step1">
+                    <div class="form-group">
+                        <label>选择国家</label>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px;">
+                            <label class="country-option active" data-country="uk">
+                                <input type="radio" name="country" value="uk" checked style="display: none;">
+                                <span style="font-size: 24px;">🇬🇧</span>
+                                <span style="font-weight: 600; margin-top: 4px;">UK</span>
+                            </label>
+                            <label class="country-option" data-country="sg">
+                                <input type="radio" name="country" value="sg" style="display: none;">
+                                <span style="font-size: 24px;">🇸🇬</span>
+                                <span style="font-weight: 600; margin-top: 4px;">SG</span>
+                            </label>
+                            <label class="country-option" data-country="hk">
+                                <input type="radio" name="country" value="hk" style="display: none;">
+                                <span style="font-size: 24px;">🇭🇰</span>
+                                <span style="font-weight: 600; margin-top: 4px;">HK</span>
+                            </label>
+                            <label class="country-option" data-country="ae">
+                                <input type="radio" name="country" value="ae" style="display: none;">
+                                <span style="font-size: 24px;">🇦🇪</span>
+                                <span style="font-weight: 600; margin-top: 4px;">UAE</span>
+                            </label>
+                            <label class="country-option" data-country="us">
+                                <input type="radio" name="country" value="us" style="display: none;">
+                                <span style="font-size: 24px;">🇺🇸</span>
+                                <span style="font-weight: 600; margin-top: 4px;">USA</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="nextStep()" style="width: 100%;">下一步 →</button>
+                </div>
+
+                <div id="step2" class="hidden">
+                    <div class="form-group">
+                        <label>公司名称 *</label>
+                        <input type="text" id="companyName" placeholder="例如：Tech Solutions Ltd" required>
+                    </div>
+                    <div class="form-group">
+                        <label>公司类型</label>
+                        <select id="companyType">
+                            <option value="ltd">私人有限公司 (Ltd)</option>
+                            <option value="llp">有限责任公司合伙 (LLP)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="useVirtualAddress" style="width: 18px; height: 18px;">
+                            <span>使用虚拟办公地址</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>行业/业务活动</label>
+                        <select id="sicCode">
+                            <option value="62012">软件开发</option>
+                            <option value="62020">IT咨询</option>
+                            <option value="70221">金融服务</option>
+                            <option value="71111">咨询</option>
+                            <option value="74999">其他商业活动</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← 返回</button>
+                        <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">下一步 →</button>
+                    </div>
+                </div>
+
+                <div id="step3" class="hidden">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;">董事/授权人</h4>
+                    <div class="form-group">
+                        <label>全名 *</label>
+                        <input type="text" id="directorName" placeholder="张三" required>
+                    </div>
+                    <div class="form-group">
+                        <label>出生日期 *</label>
+                        <input type="date" id="directorDob" required>
+                    </div>
+                    <div class="form-group">
+                        <label>国籍 *</label>
+                        <select id="directorNationality">
+                            <option value="CN">中国</option>
+                            <option value="GB">英国</option>
+                            <option value="US">美国</option>
+                            <option value="SG">新加坡</option>
+                            <option value="HK">香港</option>
+                            <option value="OTHER">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>护照号码</label>
+                        <input type="text" id="passportNumber" placeholder="可选">
+                    </div>
+                    <div class="form-group">
+                        <label>电子邮箱 *</label>
+                        <input type="email" id="directorEmail" placeholder="john@company.com" required>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← 返回</button>
+                        <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">下一步 →</button>
+                    </div>
+                </div>
+
+                <div id="step4" class="hidden">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;">股东信息</h4>
+                    <div class="form-group">
+                        <label>股东名称 *</label>
+                        <input type="text" id="shareholderName" placeholder="张三" required>
+                    </div>
+                    <div class="form-group">
+                        <label>股份数量 *</label>
+                        <input type="number" id="shares" value="100" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>股份类型</label>
+                        <select id="shareType">
+                            <option value="ordinary">普通股</option>
+                            <option value="preference">优先股</option>
+                        </select>
+                    </div>
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-top: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 8px;">订单摘要</h4>
+                        <p style="font-size: 13px; color: var(--text-secondary);">
+                            国家: <strong id="summaryCountry">UK</strong><br>
+                            虚拟地址: <strong id="summaryVirtual">否</strong><br>
+                            总计: <strong id="summaryTotal">£149</strong>
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 16px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← 返回</button>
+                        <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">下一步 →</button>
+                    </div>
+                </div>
+
+                <div id="step5" class="hidden">
+                    <div id="regAlert"></div>
+                    <div style="background: rgba(37, 99, 235, 0.1); padding: 16px; border-radius: var(--radius); margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 12px;">💳 支付</h4>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                            使用USDT支付 (TRC20/ERC20) - 快速安全
+                        </p>
+                        <div style="background: var(--bg); padding: 12px; border-radius: var(--radius); text-align: center;">
+                            <p style="font-size: 12px; color: var(--text-muted);">总金额</p>
+                            <p style="font-size: 28px; font-weight: 700; color: var(--primary);" id="paymentAmount">£149</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← 返回</button>
+                        <button class="btn btn-primary" onclick="processPayment()" style="flex: 1;" id="payBtn">使用USDT支付 →</button>
+                    </div>
+                </div>
+
+                <div id="step6" class="hidden">
+                    <div style="text-align: center; padding: 20px 0;">
+                        <div style="width: 80px; height: 80px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <span style="font-size: 40px;">✓</span>
+                        </div>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">支付成功！</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">您的公司注册正在处理中</p>
+                    </div>
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px;">
+                        <p><strong>注册ID:</strong> <span id="confirmationId">-</span></p>
+                        <p><strong>公司:</strong> <span id="confirmationCompany">-</span></p>
+                        <p><strong>状态:</strong> <span style="color: var(--accent);">处理中</span></p>
+                        <p><strong>预计时间:</strong> <span id="confirmationEta">3-5个工作日</span></p>
+                    </div>
+                    <button class="btn btn-primary" onclick="closeRegModal()" style="width: 100%;">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>账户</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="login" onclick="showTab('login')">登录</button>
+                    <button class="tab-btn" data-tab="register" onclick="showTab('register')">注册</button>
+                </div>
+
+                <div id="loginForm">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>邮箱</label>
+                            <input type="email" id="loginEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>密码</label>
+                            <input type="password" id="loginPassword" required placeholder="••••••••">
+                        </div>
+                        <div id="loginError" class="form-error"></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+                    </form>
+                </div>
+
+                <div id="registerForm" class="hidden">
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>邮箱</label>
+                            <input type="email" id="regEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>密码</label>
+                            <input type="password" id="regPassword" required placeholder="至少6个字符" minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>姓名（可选）</label>
+                            <input type="text" id="regName" placeholder="您的姓名">
+                        </div>
+                        <div id="regError" class="form-error"></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">创建账户</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://opencompanybot.com';
+        
+        let currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let selectedCountry = 'uk';
+        let selectedPackage = 'premium';
+        
+        const countryData = {
+            uk: {
+                name: '英国',
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: '£1', time: '3-5工作日' },
+                fee: { government: '£50', service: '£50起', virtual: '£50/年', secretary: '£120/年' },
+                price: '£149'
+            },
+            sg: {
+                name: '新加坡',
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: 'S$1', time: '1-3工作日' },
+                fee: { government: 'S$315', service: 'S$300起', virtual: 'S$200/年', secretary: 'S$200/年' },
+                price: '$400'
+            },
+            hk: {
+                name: '香港',
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: 'HK$1', time: '1-2工作日' },
+                fee: { government: 'HK$1720', service: 'HK$500起', virtual: 'HK$300/年', secretary: 'HK$300/年' },
+                price: '$300'
+            },
+            ae: {
+                name: '阿联酋',
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: 'AED1', time: '5-7工作日' },
+                fee: { government: 'AED500', service: 'AED500起', virtual: 'AED1000/年', secretary: 'AED500/年' },
+                price: '$600'
+            },
+            us: {
+                name: '美国',
+                req: { director: '需要', shareholder: '需要', address: '需要', capital: '$1', time: '3-5工作日' },
+                fee: { government: '$50-300', service: '$150起', virtual: '$100/年', secretary: '$100/年' },
+                price: '$250'
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserMenu();
+            setupCountryButtons();
+        });
+        
+        function updateUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            const loginBtn = document.querySelector('.header-actions .btn-ghost:not(:first-child)');
+            const regBtn = document.querySelector('.header-actions .btn-primary');
+            
+            if (currentUser && currentUser.token) {
+                loginBtn.classList.add('hidden');
+                regBtn.classList.add('hidden');
+                userMenu.classList.add('show');
+                document.getElementById('userAvatar').textContent = currentUser.email ? currentUser.email[0].toUpperCase() : 'U';
+            } else {
+                loginBtn.classList.remove('hidden');
+                regBtn.classList.remove('hidden');
+                userMenu.classList.remove('show');
+            }
+        }
+        
+        function setupCountryButtons() {
+            document.querySelectorAll('.country-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const country = btn.dataset.country;
+                    document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    showCountryDetail(country);
+                });
+            });
+        }
+        
+        function showCountryDetail(country) {
+            const data = countryData[country];
+            if (!data) return;
+            
+            document.getElementById('detailTitle').textContent = data.name + '公司注册';
+            document.getElementById('countryDetail').classList.add('active');
+            document.getElementById('countryDetail').scrollIntoView({ behavior: 'smooth' });
+            
+            const reqList = document.getElementById('reqList');
+            reqList.innerHTML = `
+                <li><span class="label">至少一名董事</span><span class="value">${data.req.director}</span></li>
+                <li><span class="label">至少一名股东</span><span class="value">${data.req.shareholder}</span></li>
+                <li><span class="label">注册地址</span><span class="value">${data.req.address}</span></li>
+                <li><span class="label">最低资本</span><span class="value">${data.req.capital}</span></li>
+                <li><span class="label">成立时间</span><span class="value">${data.req.time}</span></li>
+            `;
+            
+            const feeList = document.getElementById('feeList');
+            feeList.innerHTML = `
+                <li><span class="label">政府注册费</span><span class="value">${data.fee.government}</span></li>
+                <li><span class="label">我们的服务费</span><span class="value">${data.fee.service}</span></li>
+                <li><span class="label">虚拟地址</span><span class="value">${data.fee.virtual}</span></li>
+                <li><span class="label">公司秘书</span><span class="value">${data.fee.secretary}</span></li>
+            `;
+        }
+        
+        function selectCountry(country) {
+            selectedCountry = country;
+            showCountryDetail(country);
+        }
+        
+        function selectPackage(pkg) {
+            selectedPackage = pkg;
+            startRegistration();
+        }
+        
+        function startRegistration() {
+            if (!currentUser || !currentUser.token) {
+                openAuthModal('register');
+                return;
+            }
+            document.getElementById('regModal').classList.add('active');
+            currentStep = 1;
+            updateStepBar();
+        }
+        
+        function closeRegModal() {
+            document.getElementById('regModal').classList.remove('active');
+        }
+        
+        let currentStep = 1;
+        const totalSteps = 6;
+        
+        function updateStepBar() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.querySelector(`.step[data-step="${i}"]`);
+                if (step) step.classList.toggle('active', i === currentStep);
+            }
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepEl = document.getElementById(`step${i}`);
+                if (stepEl) stepEl.classList.toggle('hidden', i !== currentStep);
+            }
+        }
+        
+        function nextStep() {
+            if (currentStep === 1) {
+                const country = document.querySelector('input[name="country"]:checked');
+                if (!country) { alert('请选择一个国家'); return; }
+                selectedCountry = country.value;
+                updateFormFields(selectedCountry);
+                document.querySelectorAll('.country-option').forEach(opt => {
+                    opt.classList.toggle('active', opt.dataset.country === selectedCountry);
+                });
+            }
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepBar();
+                if (currentStep === 4) {
+                    document.getElementById('summaryCountry').textContent = countryData[selectedCountry]?.name || selectedCountry.toUpperCase();
+                    document.getElementById('summaryTotal').textContent = countryData[selectedCountry]?.price || '$300';
+                }
+                if (currentStep === 5) {
+                    document.getElementById('paymentAmount').textContent = countryData[selectedCountry]?.price || '$300';
+                }
+            } else {
+                submitRegistration();
+            }
+        }
+        
+        function updateFormFields(country) {
+            const companyType = document.getElementById('companyType');
+            const types = {
+                'uk': [{value: 'ltd', text: '私人有限公司 (Ltd)'}, {value: 'llp', text: '有限责任公司合伙 (LLP)'}],
+                'sg': [{value: 'pte_ltd', text: '私人有限公司 (Pte Ltd)'}, {value: 'llp', text: '有限责任公司合伙'}],
+                'hk': [{value: 'ltd', text: '私人有限公司'}, {value: 'company', text: '股份有限公司'}],
+                'ae': [{value: 'freezone', text: '自贸区公司'}, {value: 'mainland', text: '本土公司'}],
+                'us': [{value: 'llc', text: '有限责任公司 (LLC)'}, {value: 'corporation', text: '股份公司 (C Corp)'}]
+            };
+            companyType.innerHTML = (types[country] || types['uk']).map(t => `<option value="${t.value}">${t.text}</option>`).join('');
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) { currentStep--; updateStepBar(); }
+        }
+        
+        async function processPayment() {
+            const btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>创建支付...';
+            
+            document.getElementById('regAlert').innerHTML = '<div class="alert alert-loading"><span class="spinner"></span>处理中...</div>';
+            
+            setTimeout(() => {
+                currentStep = 6;
+                updateStepBar();
+                document.getElementById('confirmationId').textContent = 'INC-' + Date.now().toString().slice(-8);
+                document.getElementById('confirmationCompany').textContent = document.getElementById('companyName').value;
+                document.getElementById('confirmationEta').textContent = selectedCountry === 'uk' ? '3-5个工作日' : '5-7个工作日';
+            }, 2000);
+        }
+        
+        function submitRegistration() {
+            currentStep = 6;
+            updateStepBar();
+        }
+        
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function openAuthModal(tab = 'login') {
+            document.getElementById('authModal').classList.add('active');
+            showTab(tab);
+        }
+        
+        function closeModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+        
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+            document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+        }
+        
+        async function handleRegister(e) {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const errorEl = document.getElementById('regError');
+            errorEl.textContent = '';
+            
+            currentUser = { email, token: 'demo-token-' + Date.now() };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            updateUserMenu();
+            closeModal();
+        }
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const errorEl = document.getElementById('loginError');
+            errorEl.textContent = '';
+            
+            currentUser = { email, token: 'demo-token-' + Date.now() };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            updateUserMenu();
+            closeModal();
+        }
+        
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('user');
+            updateUserMenu();
+        }
+    </script>
 </body>
 </html>
