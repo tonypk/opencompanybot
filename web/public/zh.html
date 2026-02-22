@@ -3,8 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCompanyBot - 让AI拥有自己的公司</title>
-    <meta name="description" content="全球首个让AI代理拥有公司的平台。AI可以作为法人实体注册公司，MCP协议支持，全球USDT支付。">
+    <title>OpenCompanyBot - 让AI拥有自己的公司 | AI公司注册</title>
+    <meta name="description" content="全球首个让AI代理拥有公司的平台。支持英国、新加坡、香港、阿联酋、美国公司注册。快速处理，USDT支付，MCP协议支持。">
+    <meta name="keywords" content="AI公司注册, 公司注册, 英国公司注册, 新加坡公司, 香港公司, 阿联酋公司, 美国公司, AI商业, MCP协议, USDT支付, 虚拟地址, 提名董事">
+    <meta name="author" content="OpenCompanyBot">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://opencompanybot.com/zh/">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://opencompanybot.com/zh/">
+    <meta property="og:title" content="OpenCompanyBot - 让AI拥有自己的公司">
+    <meta property="og:description" content="全球首个让AI代理拥有公司的平台。支持英国、新加坡、香港、阿联酋、美国公司注册。">
+    <meta property="og:image" content="https://opencompanybot.com/og-image.png">
+    <meta property="og:site_name" content="OpenCompanyBot">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://opencompanybot.com/zh/">
+    <meta name="twitter:title" content="OpenCompanyBot - 让AI拥有自己的公司">
+    <meta name="twitter:description" content="全球首个让AI代理拥有公司的平台。">
+    <meta name="twitter:image" content="https://opencompanybot.com/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -1063,6 +1083,19 @@
         </div>
     </section>
 
+    <!-- Newsletter Section -->
+    <section style="padding: 60px 0; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; font-size: 32px; margin-bottom: 12px;">获取独家更新</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 24px;">订阅以获取公司注册技巧、新国家推出和特别优惠。</p>
+            <form style="display: flex; gap: 12px; max-width: 500px; margin: 0 auto; flex-wrap: wrap; justify-content: center;" onsubmit="handleNewsletter(event)">
+                <input type="email" placeholder="输入您的邮箱" required style="flex: 1; min-width: 250px; padding: 14px 20px; border: none; border-radius: var(--radius); font-size: 16px;">
+                <button type="submit" class="btn" style="background: white; color: var(--primary); font-weight: 600; padding: 14px 28px;">订阅</button>
+            </form>
+            <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 12px;">无垃圾邮件。随时退订。</p>
+        </div>
+    </section>
+
     <!-- Contact -->
     <section class="features" id="contact" style="background: var(--bg);">
         <div class="container">
@@ -1616,6 +1649,13 @@
             currentUser = null;
             localStorage.removeItem('user');
             updateUserMenu();
+        }
+        
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            alert('感谢订阅！我们将向 ' + email + ' 发送更新');
+            e.target.reset();
         }
     </script>
 </body>

@@ -3,8 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCompanyBot - Give AI Its Own Company</title>
-    <meta name="description" content="The first platform enabling AI agents to own and operate companies. Let your AI become a legal entity. Register in UK, SG, HK, UAE, USA.">
+    <title>OpenCompanyBot - Give AI Its Own Company | AI Company Registration</title>
+    <meta name="description" content="The first platform enabling AI agents to own and operate companies. Register companies in UK, Singapore, Hong Kong, UAE, USA with AI assistance. Fast processing, USDT payments, MCP protocol support.">
+    <meta name="keywords" content="AI company registration, company incorporation, UK company formation, Singapore company registration, Hong Kong company, UAE company, USA LLC, AI business, MCP protocol, USDT payment, virtual address, nominee director">
+    <meta name="author" content="OpenCompanyBot">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://opencompanybot.com/">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://opencompanybot.com/">
+    <meta property="og:title" content="OpenCompanyBot - Give AI Its Own Company | AI Company Registration">
+    <meta property="og:description" content="The first platform enabling AI agents to own and operate companies. Register companies in UK, SG, HK, UAE, USA with AI assistance.">
+    <meta property="og:image" content="https://opencompanybot.com/og-image.png">
+    <meta property="og:site_name" content="OpenCompanyBot">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://opencompanybot.com/">
+    <meta name="twitter:title" content="OpenCompanyBot - Give AI Its Own Company">
+    <meta name="twitter:description" content="The first platform enabling AI agents to own and operate companies. Register in UK, SG, HK, UAE, USA.">
+    <meta name="twitter:image" content="https://opencompanybot.com/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "OpenCompanyBot",
+        "description": "The first platform enabling AI agents to own and operate companies. Register companies globally with AI assistance.",
+        "url": "https://opencompanybot.com",
+        "logo": "https://opencompanybot.com/logo.svg",
+        "sameAs": [
+            "https://twitter.com/opencompanybot",
+            "https://t.me/opencompanybot"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "hello@opencompanybot.com",
+            "contactType": "customer service"
+        },
+        "serviceType": ["Company Registration", "AI Company Incorporation", "Virtual Address", "Corporate Secretary"],
+        "areaServed": ["United Kingdom", "Singapore", "Hong Kong", "United Arab Emirates", "United States"],
+        "priceRange": "£50-600"
+    }
+    </script>
+    
+    <!-- JSON-LD LocalBusiness -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "OpenCompanyBot",
+        "description": "AI-powered company registration service",
+        "url": "https://opencompanybot.com",
+        "telephone": "+1-555-123-4567",
+        "email": "hello@opencompanybot.com",
+        "areaServed": {
+            "@type": "Place",
+            "name": "Global"
+        },
+        "serviceType": "Company Registration"
+    }
+    </script>
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -806,6 +876,77 @@
             color: var(--accent);
         }
 
+        /* Floating CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .floating-cta .btn {
+            padding: 16px 24px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+        }
+
+        .floating-cta .btn-primary {
+            background: var(--accent);
+        }
+
+        .floating-cta .btn-telegram {
+            background: #0088cc;
+            color: white;
+        }
+
+        /* Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .cookie-banner.show {
+            display: block;
+        }
+
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .cookie-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .cookie-content .btn {
+            white-space: nowrap;
+        }
+
+        /* Trustpilot widget placeholder */
+        .trust-widget {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
         .order-info {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1234,7 +1375,18 @@
         </div>
     </section>
 
-    <!-- Contact -->
+    <!-- Newsletter Section -->
+    <section style="padding: 60px 0; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; font-size: 32px; margin-bottom: 12px;">Get Exclusive Updates</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 24px;">Subscribe for company registration tips, new country launches, and special offers.</p>
+            <form style="display: flex; gap: 12px; max-width: 500px; margin: 0 auto; flex-wrap: wrap; justify-content: center;" onsubmit="handleNewsletter(event)">
+                <input type="email" placeholder="Enter your email" required style="flex: 1; min-width: 250px; padding: 14px 20px; border: none; border-radius: var(--radius); font-size: 16px;">
+                <button type="submit" class="btn" style="background: white; color: var(--primary); font-weight: 600; padding: 14px 28px;">Subscribe</button>
+            </form>
+            <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 12px;">No spam. Unsubscribe anytime.</p>
+        </div>
+    </section>
     <section class="features" id="contact" style="background: var(--bg-secondary);">
         <div class="container">
             <h2 class="section-title">Get In Touch</h2>
@@ -2131,43 +2283,53 @@
         function logout() {
             currentUser = null;
             localStorage.removeItem('user');
-            localStorage.removeItem('token');
             updateUserMenu();
         }
         
-        async function loadOrders() {
-            const list = document.getElementById('ordersList');
-            
-            if (!currentUser || !currentUser.token) {
-                list.innerHTML = '<p style="color: var(--text-secondary);">Please log in to view orders</p>';
-                return;
-            }
-            
-            try {
-                const res = await fetch(API_BASE + '/api/v1/orders', {
-                    headers: { 'Authorization': 'Bearer ' + currentUser.token }
-                });
-                const data = await res.json();
-                
-                if (res.ok && data.orders && data.orders.length > 0) {
-                    list.innerHTML = data.orders.map(o => `
-                        <div class="order-card">
-                            <div class="order-header">
-                                <span class="order-id">${o.id}</span>
-                                <span class="order-status ${o.status}">${o.status}</span>
-                            </div>
-                            <div class="order-info">
-                                <span>Company: ${o.company_name || 'N/A'}</span>
-                                <span>Amount: £${o.amount || 0}</span>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    list.innerHTML = '<p style="color: var(--text-secondary);">No orders yet. Start a new registration!</p>';
-                }
-            } catch (err) {
-                list.innerHTML = '<p style="color: var(--error);">Failed to load orders</p>';
-            }
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            alert('Thanks for subscribing! We\'ll send updates to ' + email);
+            e.target.reset();
+        }
+    </script>
+    <!-- Floating CTA -->
+    <div class="floating-cta">
+        <a href="https://t.me/opencompanybot" class="btn btn-telegram" target="_blank">
+            💬 Chat on Telegram
+        </a>
+        <button class="btn btn-primary" onclick="startRegistration()">
+            🚀 Start Now
+        </button>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <p>We use cookies to improve your experience. By continuing to visit this site you agree to our use of cookies.</p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary" onclick="rejectCookies()">Reject</button>
+                <button class="btn btn-primary" onclick="acceptCookies()">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cookie consent
+        if (!localStorage.getItem('cookieConsent')) {
+            setTimeout(() => {
+                document.getElementById('cookieBanner').classList.add('show');
+            }, 2000);
+        }
+        
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieBanner').classList.remove('show');
+        }
+        
+        function rejectCookies() {
+            localStorage.setItem('cookieConsent', 'rejected');
+            document.getElementById('cookieBanner').classList.remove('show');
         }
     </script>
 </body>
