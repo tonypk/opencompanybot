@@ -1043,13 +1043,15 @@
                         <div class="step" data-step="3"></div>
                         <div class="step" data-step="4"></div>
                         <div class="step" data-step="5"></div>
+                        <div class="step" data-step="6"></div>
                     </div>
                     <div class="step-label">
                         <span class="active" id="stepLabel1">Country</span>
                         <span id="stepLabel2">Company</span>
                         <span id="stepLabel3">Director</span>
                         <span id="stepLabel4">Shareholder</span>
-                        <span id="stepLabel5">Review</span>
+                        <span id="stepLabel5">Payment</span>
+                        <span id="stepLabel6">Done</span>
                     </div>
                 </div>
 
@@ -1214,17 +1216,52 @@
 
                 <div id="step5" class="hidden">
                     <div id="regAlert"></div>
-                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px;">
-                        <p><strong>Country:</strong> <span id="reviewCountry">UK</span></p>
-                        <p><strong>Company:</strong> <span id="reviewCompany">-</span></p>
-                        <p><strong>Type:</strong> <span id="reviewType">Ltd</span></p>
-                        <p><strong>Director:</strong> <span id="reviewDirector">-</span></p>
-                        <p><strong>Virtual Address:</strong> <span id="reviewVirtual">No</span></p>
+                    
+                    <!-- Payment Section -->
+                    <div style="background: var(--primary-light); padding: 16px; border-radius: var(--radius); margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 12px;">💳 Payment</h4>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                            Pay with USDT (TRC20/ERC20) - Fast & Secure
+                        </p>
+                        <div style="background: var(--bg); padding: 12px; border-radius: var(--radius); text-align: center;">
+                            <p style="font-size: 12px; color: var(--text-muted);">Total Amount</p>
+                            <p style="font-size: 28px; font-weight: 700; color: var(--primary);" id="paymentAmount">£149</p>
+                        </div>
                     </div>
+                    
                     <div style="display: flex; gap: 12px;">
                         <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
-                        <button class="btn btn-primary" onclick="submitRegistration()" style="flex: 1;">Submit</button>
+                        <button class="btn btn-primary" onclick="processPayment()" style="flex: 1;" id="payBtn">Pay with USDT →</button>
                     </div>
+                </div>
+
+                <div id="step6" class="hidden">
+                    <!-- Success Animation -->
+                    <div style="text-align: center; padding: 20px 0;">
+                        <div style="width: 80px; height: 80px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <span style="font-size: 40px;">✓</span>
+                        </div>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">Payment Successful!</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Your company registration is being processed</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px;">
+                        <p><strong>Incorporation ID:</strong> <span id="confirmationId">-</span></p>
+                        <p><strong>Company:</strong> <span id="confirmationCompany">-</span></p>
+                        <p><strong>Status:</strong> <span style="color: var(--accent);">Processing</span></p>
+                        <p><strong>ETA:</strong> <span id="confirmationEta">3-5 business days</span></p>
+                    </div>
+                    
+                    <div style="background: var(--primary-light); padding: 16px; border-radius: var(--radius); margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 8px;">Next Steps:</h4>
+                        <ol style="font-size: 13px; color: var(--text-secondary); padding-left: 20px;">
+                            <li>We'll verify your documents</li>
+                            <li>Submit to Companies House</li>
+                            <li>Receive company certificate via email</li>
+                        </ol>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="closeRegModal()" style="width: 100%;">Done</button>
                 </div>
             </div>
         </div>
@@ -1372,28 +1409,33 @@
         
         // Multi-step form
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 6;
         
         function updateStepBar() {
             for (let i = 1; i <= totalSteps; i++) {
                 const step = document.querySelector(`.step[data-step="${i}"]`);
-                if (i < currentStep) {
-                    step.classList.add('completed');
-                    step.classList.remove('active');
-                } else if (i === currentStep) {
-                    step.classList.add('active');
-                    step.classList.remove('completed');
-                } else {
-                    step.classList.remove('active', 'completed');
+                if (step) {
+                    if (i < currentStep) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (i === currentStep) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
                 }
             }
             
             // Show/hide step content
             for (let i = 1; i <= totalSteps; i++) {
-                document.getElementById(`step${i}`).classList.toggle('hidden', i !== currentStep);
+                const stepEl = document.getElementById(`step${i}`);
+                if (stepEl) {
+                    stepEl.classList.toggle('hidden', i !== currentStep);
+                }
             }
         }
-        
+
         function nextStep() {
             if (currentStep === 1) {
                 const country = document.querySelector('input[name="country"]:checked');
@@ -1416,6 +1458,22 @@
                 
                 // Update review section
                 if (currentStep === 5) {
+                    const countryNames = {'uk': 'UK', 'sg': 'Singapore', 'hk': 'Hong Kong', 'ae': 'UAE', 'us': 'USA'};
+                    document.getElementById('reviewCountry').textContent = countryNames[selectedCountry] || selectedCountry.toUpperCase();
+                    document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value || '-';
+                    document.getElementById('reviewType').textContent = document.getElementById('companyType').value || '-';
+                    document.getElementById('reviewDirector').textContent = document.getElementById('directorName').value || '-';
+                    const vaEl = document.getElementById('useVirtualAddress');
+                    document.getElementById('reviewVirtual').textContent = (vaEl && vaEl.checked) ? 'Yes' : 'No';
+                    
+                    // Update payment amount
+                    const prices = {'uk': '£149', 'sg': '$400', 'hk': '$300', 'ae': '$600', 'us': '$250'};
+                    document.getElementById('paymentAmount').textContent = prices[selectedCountry] || '$300';
+                }
+            } else {
+                submitRegistration();
+            }
+        }
                     const countryNames = {'uk': 'UK', 'sg': 'Singapore', 'hk': 'Hong Kong', 'ae': 'UAE', 'us': 'USA'};
                     document.getElementById('reviewCountry').textContent = countryNames[selectedCountry] || selectedCountry.toUpperCase();
                     document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value || '-';
@@ -1563,6 +1621,72 @@
             if (currentStep > 1) {
                 currentStep--;
                 updateStepBar();
+            }
+        }
+        
+        async function processPayment() {
+            const btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Creating payment...';
+            
+            const prices = {'uk': 149, 'sg': 400, 'hk': 300, 'ae': 600, 'us': 250};
+            const amount = prices[selectedCountry] || 100;
+            
+            try {
+                // Create payment via API
+                const res = await fetch(API_BASE + '/api/v1/payments/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + (currentUser?.token || '')
+                    },
+                    body: JSON.stringify({
+                        order_id: 'ORD-' + Date.now(),
+                        amount: amount,
+                        currency: 'USDT'
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.payment) {
+                    // Show payment details (in real app, user would send USDT)
+                    const alertEl = document.getElementById('regAlert');
+                    alertEl.innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>Payment Created!</strong><br>
+                            Send <strong>${amount} USDT</strong> to:<br>
+                            <code style="font-size:11px;word-break:break-all;">${data.payment.address}</code><br>
+                            <small>Waiting for confirmation...</small>
+                        </div>
+                    `;
+                    
+                    // Simulate payment confirmation after 3 seconds
+                    setTimeout(() => {
+                        currentStep = 6;
+                        updateStepBar();
+                        
+                        // Update confirmation details
+                        document.getElementById('confirmationId').textContent = data.payment.id;
+                        document.getElementById('confirmationCompany').textContent = document.getElementById('companyName').value;
+                        document.getElementById('confirmationEta').textContent = selectedCountry === 'uk' ? '3-5 business days' : '5-7 business days';
+                    }, 3000);
+                } else {
+                    // Demo mode - just proceed
+                    document.getElementById('regAlert').innerHTML = '<div class="alert alert-loading">Demo mode - processing...</div>';
+                    setTimeout(() => {
+                        currentStep = 6;
+                        updateStepBar();
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Payment error:', err);
+                // Demo mode fallback
+                document.getElementById('regAlert').innerHTML = '<div class="alert alert-loading">Processing...</div>';
+                setTimeout(() => {
+                    currentStep = 6;
+                    updateStepBar();
+                }, 2000);
             }
         }
         
