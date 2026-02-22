@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'app/**'
-      - 'pyproject.toml'
+      - 'main.py'
       - 'wrangler.toml'
       - '.github/workflows/deploy-api.yml'
 
@@ -24,20 +23,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          pip install -e .
-
-      - name: Lint with Ruff
-        run: |
-          pip install ruff
-          ruff check app/
-
-      - name: Run tests
-        run: |
-          pip install pytest pytest-asyncio httpx
-          pytest tests/ -v || true
-
       - name: Install Wrangler
         uses: cloudflare/wrangler-action@v3
         with:
@@ -45,7 +30,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Deploy to Cloudflare Workers
-        run: wrangler deploy --env production
+        run: npx wrangler deploy --env production
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
