@@ -665,6 +665,24 @@
             background: var(--accent);
         }
 
+        .step.active {
+            background: var(--primary);
+        }
+
+        .step-label span {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .step-label span.active {
+            background: var(--primary);
+            color: white;
+        }
+
         .step-label {
             text-align: center;
             font-size: 12px;
@@ -790,6 +808,15 @@
 
         /* Hide elements */
         .hidden { display: none !important; }
+
+        /* Step indicator */
+        .step {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -988,6 +1015,156 @@
         </div>
     </footer>
 
+    <!-- Registration Modal -->
+    <div class="modal" id="regModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Register Company</h3>
+                <button class="modal-close" onclick="closeRegModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="steps">
+                    <div class="step-bar">
+                        <div class="step active" data-step="1"></div>
+                        <div class="step" data-step="2"></div>
+                        <div class="step" data-step="3"></div>
+                        <div class="step" data-step="4"></div>
+                        <div class="step" data-step="5"></div>
+                    </div>
+                    <div class="step-label">
+                        <span class="active" id="stepLabel1">Country</span>
+                        <span id="stepLabel2">Company</span>
+                        <span id="stepLabel3">Director</span>
+                        <span id="stepLabel4">Shareholder</span>
+                        <span id="stepLabel5">Review</span>
+                    </div>
+                </div>
+
+                <div id="step1">
+                    <div class="form-group">
+                        <label>Select Country</label>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px;">
+                            <label style="display: flex; flex-direction: column; align-items: center; padding: 16px; border: 2px solid var(--primary); border-radius: var(--radius); cursor: pointer; background: var(--primary-light);">
+                                <input type="radio" name="country" value="uk" checked style="display: none;">
+                                <span style="font-size: 32px;">🇬🇧</span>
+                                <span style="font-weight: 600; margin-top: 8px;">UK</span>
+                                <span style="font-size: 12px; color: var(--primary);">Available</span>
+                            </label>
+                            <label style="display: flex; flex-direction: column; align-items: center; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius); cursor: not-allowed; opacity: 0.5;">
+                                <input type="radio" name="country" value="sg" disabled style="display: none;">
+                                <span style="font-size: 32px;">🇸🇬</span>
+                                <span style="font-weight: 600; margin-top: 8px;">SG</span>
+                                <span style="font-size: 12px; color: var(--text-muted);">Soon</span>
+                            </label>
+                            <label style="display: flex; flex-direction: column; align-items: center; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius); cursor: not-allowed; opacity: 0.5;">
+                                <input type="radio" name="country" value="hk" disabled style="display: none;">
+                                <span style="font-size: 32px;">🇭🇰</span>
+                                <span style="font-weight: 600; margin-top: 8px;">HK</span>
+                                <span style="font-size: 12px; color: var(--text-muted);">Soon</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="nextStep()" style="width: 100%;">Next →</button>
+                </div>
+
+                <div id="step2" class="hidden">
+                    <div class="form-group">
+                        <label>Company Name *</label>
+                        <input type="text" id="companyName" placeholder="e.g., Tech Solutions Ltd" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Type</label>
+                        <select id="companyType">
+                            <option value="ltd">Private Limited Company (Ltd)</option>
+                            <option value="llp">Limited Liability Partnership (LLP)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="useVirtualAddress" style="width: 18px; height: 18px;">
+                            <span>Use virtual office address (+£50)</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>SIC Code</label>
+                        <select id="sicCode">
+                            <option value="62012">62012 - Software Development</option>
+                            <option value="62020">62020 - IT Consulting</option>
+                            <option value="70221">70221 - Financial Management</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
+                        <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">Next →</button>
+                    </div>
+                </div>
+
+                <div id="step3" class="hidden">
+                    <div class="form-group">
+                        <label>Director Full Name *</label>
+                        <input type="text" id="directorName" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth *</label>
+                        <input type="date" id="directorDob" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nationality *</label>
+                        <select id="directorNationality">
+                            <option value="GB">British</option>
+                            <option value="US">American</option>
+                            <option value="CN">Chinese</option>
+                            <option value="IN">Indian</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
+                        <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">Next →</button>
+                    </div>
+                </div>
+
+                <div id="step4" class="hidden">
+                    <div class="form-group">
+                        <label>Shareholder Name *</label>
+                        <input type="text" id="shareholderName" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Shares *</label>
+                        <input type="number" id="shares" value="100" min="1" required>
+                    </div>
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 8px;">Summary</h4>
+                        <p style="font-size: 13px; color: var(--text-secondary);">
+                            Package: <strong>Premium (£99)</strong><br>
+                            Virtual Address: <strong id="summaryVirtual">No</strong><br>
+                            Total: <strong id="summaryTotal">£149</strong>
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
+                        <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">Review →</button>
+                    </div>
+                </div>
+
+                <div id="step5" class="hidden">
+                    <div id="regAlert"></div>
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px;">
+                        <p><strong>Country:</strong> <span id="reviewCountry">UK</span></p>
+                        <p><strong>Company:</strong> <span id="reviewCompany">-</span></p>
+                        <p><strong>Type:</strong> <span id="reviewType">Ltd</span></p>
+                        <p><strong>Director:</strong> <span id="reviewDirector">-</span></p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
+                        <button class="btn btn-primary" onclick="submitRegistration()" style="flex: 1;">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Auth Modal -->
     <div class="modal" id="authModal">
         <div class="modal-content">
@@ -1119,7 +1296,117 @@
                 openAuthModal('register');
                 return;
             }
-            alert('Registration form coming soon!\n\nPackage: ' + selectedPackage + '\nCountry: ' + selectedCountry.toUpperCase());
+            document.getElementById('regModal').classList.add('active');
+            currentStep = 1;
+            updateStepBar();
+        }
+        
+        function closeRegModal() {
+            document.getElementById('regModal').classList.remove('active');
+        }
+        
+        // Multi-step form
+        let currentStep = 1;
+        const totalSteps = 5;
+        
+        function updateStepBar() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.querySelector(`.step[data-step="${i}"]`);
+                if (i < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (i === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            }
+            
+            // Show/hide step content
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.toggle('hidden', i !== currentStep);
+            }
+        }
+        
+        function nextStep() {
+            // Validate current step
+            if (currentStep === 1) {
+                const country = document.querySelector('input[name="country"]:checked');
+                if (!country) {
+                    alert('Please select a country');
+                    return;
+                }
+                selectedCountry = country.value;
+            }
+            
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepBar();
+            } else {
+                submitRegistration();
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepBar();
+            }
+        }
+        
+        async function submitRegistration() {
+            const btn = document.querySelector('#step5 button');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Processing...';
+            
+            const formData = {
+                company_name: document.getElementById('companyName').value,
+                company_type: document.getElementById('companyType').value,
+                use_virtual_address: document.getElementById('useVirtualAddress').checked,
+                director_name: document.getElementById('directorName').value,
+                director_dob: document.getElementById('directorDob').value,
+                director_nationality: document.getElementById('directorNationality').value,
+                shareholder_name: document.getElementById('shareholderName').value,
+                shares: document.getElementById('shares').value || '100',
+                sic_code: document.getElementById('sicCode').value,
+                country: selectedCountry
+            };
+            
+            try {
+                const res = await fetch(API_BASE + '/api/v1/companies/incorporate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + currentUser.token
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    document.getElementById('step5').innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>✓ Registration Submitted!</strong><br>
+                            Company: ${data.company_name}<br>
+                            Status: ${data.status}<br>
+                            Incorporation ID: ${data.incorporation_id || 'PENDING'}
+                        </div>
+                        <button class="btn btn-primary" onclick="closeRegModal()" style="width: 100%; margin-top: 16px;">Done</button>
+                    `;
+                } else {
+                    document.getElementById('step5').innerHTML = `
+                        <div class="alert alert-error">Error: ${data.error || 'Registration failed'}</div>
+                        <button class="btn btn-primary" onclick="prevStep()" style="width: 100%; margin-top: 16px;">Go Back</button>
+                    `;
+                }
+            } catch (err) {
+                document.getElementById('step5').innerHTML = `
+                    <div class="alert alert-error">Network error: ${err.message}</div>
+                    <button class="btn btn-primary" onclick="prevStep()" style="width: 100%; margin-top: 16px;">Go Back</button>
+                `;
+            }
         }
         
         function scrollToFeatures() {
