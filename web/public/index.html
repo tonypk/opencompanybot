@@ -829,7 +829,14 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            document.getElementById(tab + 'Form').classList.add('active');
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.add('active');
+            } else if (tab === 'register') {
+                document.getElementById('registerForm').classList.add('active');
+            } else if (tab === 'orders') {
+                document.getElementById('ordersContent').classList.add('active');
+                loadOrders();
+            }
         }
         
         async function handleLogin(e) {
@@ -937,8 +944,8 @@
         }
         
         function showOrders() {
-            openModal('orders');
-            loadOrders();
+            document.getElementById('authModal').classList.add('active');
+            showTab('orders');
         }
         
         // Initialize
@@ -956,6 +963,7 @@
             <div class="tabs">
                 <button class="tab active" data-tab="login" onclick="showTab('login')">Login</button>
                 <button class="tab" data-tab="register" onclick="showTab('register')">Register</button>
+                <button class="tab" data-tab="orders" onclick="showTab('orders')">My Orders</button>
             </div>
             
             <div id="loginForm" class="tab-content active">
@@ -993,7 +1001,9 @@
             </div>
             
             <div id="ordersContent" class="tab-content">
-                <div id="ordersList"></div>
+                <div id="ordersList">
+                    <p style="color: var(--text-secondary);">Loading orders...</p>
+                </div>
             </div>
         </div>
     </div>
