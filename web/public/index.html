@@ -301,6 +301,13 @@
             transform: translateY(-1px);
         }
 
+        .btn-primary:disabled {
+            background: var(--accent);
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-secondary {
             background: var(--bg-secondary);
             color: var(--text);
@@ -473,6 +480,22 @@
             background: rgba(59, 130, 246, 0.1);
             border: 1px solid var(--accent);
             color: var(--accent);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--accent);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         @media (max-width: 768px) {
@@ -741,7 +764,7 @@
             const alertEl = document.getElementById('formAlert');
             const submitBtn = this.querySelector('button[type="submit"]');
             
-            alertEl.innerHTML = '<div class="alert alert-loading">Submitting your company registration...</div>';
+            alertEl.innerHTML = '<div class="alert alert-loading"><span class="spinner"></span>Submitting your company registration...</div>';
             submitBtn.disabled = true;
             
             const formData = new FormData(this);
