@@ -265,7 +265,14 @@
             font-size: 14px;
         }
 
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
         .form-group input,
+        .form-group select,
+        .form-group textarea {
         .form-group select,
         .form-group textarea {
             width: 100%;
@@ -460,9 +467,26 @@
                 <div class="form-section">
                     <h3>Registered Office Address (UK)</h3>
                     <div class="form-group">
-                        <label>Address Line 1 *</label>
-                        <input type="text" name="address_line_1" required placeholder="e.g., 123 High Street">
+                        <label>
+                            <input type="checkbox" id="useVirtualAddress" onchange="toggleVirtualAddress()"> 
+                            Use Virtual Office Address (+£50/year)
+                        </label>
                     </div>
+                    
+                    <div id="virtualAddressFields" style="display:none;">
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+                            We'll provide a prestigious UK business address in Central London. Includes:
+                            <br>• Mail handling & forwarding
+                            <br>• Registered office address for Companies House
+                            <br>• Director service address
+                        </p>
+                    </div>
+                    
+                    <div id="manualAddressFields">
+                        <div class="form-group">
+                            <label>Address Line 1 *</label>
+                            <input type="text" name="address_line_1" id="address_line_1" placeholder="e.g., 123 High Street">
+                        </div>
                     <div class="form-group">
                         <label>Address Line 2</label>
                         <input type="text" name="address_line_2" placeholder="e.g., Suite 4">
@@ -563,6 +587,18 @@
     </footer>
 
     <script>
+        function toggleVirtualAddress() {
+            const useVirtual = document.getElementById('useVirtualAddress').checked;
+            document.getElementById('virtualAddressFields').style.display = useVirtual ? 'block' : 'none';
+            document.getElementById('manualAddressFields').style.display = useVirtual ? 'none' : 'block';
+            
+            if (useVirtual) {
+                document.getElementById('address_line_1').removeAttribute('required');
+            } else {
+                document.getElementById('address_line_1').setAttribute('required', 'required');
+            }
+        }
+
         document.getElementById('companyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -573,17 +609,34 @@
             submitBtn.disabled = true;
             
             const formData = new FormData(this);
-            const data = {
-                company_name: formData.get('company_name'),
-                company_type: 'ltd',
-                registered_office_address: {
+            const useVirtualAddress = document.getElementById('useVirtualAddress').checked;
+            
+            let addressData = {};
+            if (useVirtualAddress) {
+                addressData = {
+                    address_line_1: "Virtual Office Address",
+                    address_line_2: "Suite 123",
+                    locality: "London",
+                    region: "Greater London",
+                    postal_code: "SW1Y 4RD",
+                    country: "United Kingdom"
+                };
+            } else {
+                addressData = {
                     address_line_1: formData.get('address_line_1'),
                     address_line_2: formData.get('address_line_2'),
                     locality: formData.get('locality'),
                     region: formData.get('region'),
                     postal_code: formData.get('postal_code'),
                     country: formData.get('country')
-                },
+                };
+            }
+            
+            const data = {
+                company_name: formData.get('company_name'),
+                company_type: 'ltd',
+                use_virtual_address: useVirtualAddress,
+                registered_office_address: addressData,
                 directors: [{
                     name: formData.get('director_name'),
                     date_of_birth: formData.get('director_dob'),
