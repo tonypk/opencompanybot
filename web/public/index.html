@@ -1104,19 +1104,24 @@
                             <option value="llp">Limited Liability Partnership (LLP)</option>
                         </select>
                     </div>
+                    
+                    <!-- Dynamic field based on country -->
+                    <div id="countryField"></div>
+                    
                     <div class="form-group">
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                             <input type="checkbox" id="useVirtualAddress" style="width: 18px; height: 18px;">
-                            <span>Use virtual office address (+£50)</span>
+                            <span>Use virtual office address</span>
                         </label>
                     </div>
                     <div class="form-group">
-                        <label>SIC Code</label>
+                        <label>Industry / Business Activity</label>
                         <select id="sicCode">
-                            <option value="62012">62012 - Software Development</option>
-                            <option value="62020">62020 - IT Consulting</option>
-                            <option value="70221">70221 - Financial Management</option>
-                            <option value="other">Other</option>
+                            <option value="62012">Software Development</option>
+                            <option value="62020">IT Consulting</option>
+                            <option value="70221">Financial Services</option>
+                            <option value="71111">Consulting</option>
+                            <option value="74999">Other Business Activities</option>
                         </select>
                     </div>
                     <div style="display: flex; gap: 12px;">
@@ -1126,8 +1131,9 @@
                 </div>
 
                 <div id="step3" class="hidden">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;">Director / Authorized Person</h4>
                     <div class="form-group">
-                        <label>Director Full Name *</label>
+                        <label>Full Name *</label>
                         <input type="text" id="directorName" placeholder="John Smith" required>
                     </div>
                     <div class="form-group">
@@ -1141,8 +1147,23 @@
                             <option value="US">American</option>
                             <option value="CN">Chinese</option>
                             <option value="IN">Indian</option>
+                            <option value="SG">Singapore Citizen</option>
+                            <option value="HK">Hong Kong Resident</option>
+                            <option value="AE">UAE Resident</option>
                             <option value="OTHER">Other</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Passport Number</label>
+                        <input type="text" id="passportNumber" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="directorEmail" placeholder="john@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="directorPhone" placeholder="+44 7700 900000">
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
@@ -1151,6 +1172,7 @@
                 </div>
 
                 <div id="step4" class="hidden">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;">Shareholder Information</h4>
                     <div class="form-group">
                         <label>Shareholder Name *</label>
                         <input type="text" id="shareholderName" placeholder="John Smith" required>
@@ -1159,15 +1181,32 @@
                         <label>Number of Shares *</label>
                         <input type="number" id="shares" value="100" min="1" required>
                     </div>
-                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-bottom: 16px;">
-                        <h4 style="font-size: 14px; margin-bottom: 8px;">Summary</h4>
+                    <div class="form-group">
+                        <label>Share Type</label>
+                        <select id="shareType">
+                            <option value="ordinary">Ordinary Shares</option>
+                            <option value="preference">Preference Shares</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Documents Section -->
+                    <div style="margin-top: 20px; padding: 16px; background: var(--primary-light); border-radius: var(--radius);">
+                        <h4 style="font-size: 14px; margin-bottom: 12px;">Required Documents</h4>
+                        <p style="font-size: 13px; color: var(--text-secondary);" id="docRequirements">
+                            • Valid passport<br>
+                            • Proof of address (utility bill)
+                        </p>
+                    </div>
+                    
+                    <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); margin-top: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 8px;">Order Summary</h4>
                         <p style="font-size: 13px; color: var(--text-secondary);">
-                            Package: <strong>Premium (£99)</strong><br>
+                            Country: <strong id="summaryCountry">UK</strong><br>
                             Virtual Address: <strong id="summaryVirtual">No</strong><br>
                             Total: <strong id="summaryTotal">£149</strong>
                         </p>
                     </div>
-                    <div style="display: flex; gap: 12px;">
+                    <div style="display: flex; gap: 12px; margin-top: 16px;">
                         <button class="btn btn-secondary" onclick="prevStep()" style="flex: 1;">← Back</button>
                         <button class="btn btn-primary" onclick="nextStep()" style="flex: 1;">Review →</button>
                     </div>
@@ -1393,6 +1432,7 @@
         function updateFormFields(country) {
             const companyType = document.getElementById('companyType');
             const sicCode = document.getElementById('sicCode');
+            const countryField = document.getElementById('countryField');
             
             // Update company types based on country
             const types = {
@@ -1423,25 +1463,99 @@
                 `<option value="${t.value}">${t.text}</option>`
             ).join('');
             
-            // Update virtual address label
+            // Add country-specific fields
+            const fieldHTML = {
+                'uk': '',
+                'sg': `
+                    <div class="form-group">
+                        <label>Registered Address *</label>
+                        <input type="text" id="regAddress" placeholder="123 Orchard Road, Singapore" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Activities *</label>
+                        <input type="text" id="businessActivities" placeholder="e.g., Software Development, Trading" required>
+                    </div>
+                `,
+                'hk': `
+                    <div class="form-group">
+                        <label>Registered Address *</label>
+                        <input type="text" id="regAddress" placeholder="123 Queen's Road, Hong Kong" required>
+                    </div>
+                `,
+                'ae': `
+                    <div class="form-group">
+                        <label>Free Zone *</label>
+                        <select id="freezone">
+                            <option value="dmcc">DMCC (Dubai Multi Commodities Centre)</option>
+                            <option value="ifza">IFZA (International Free Zone Authority)</option>
+                            <option value="dafza">DAFZA (Dubai Airport Freezone)</option>
+                            <option value="jafza">JAFZA (Jebel Ali Free Zone)</option>
+                            <option value="mainland">UAE Mainland</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="needVisa" style="width: 18px; height: 18px;">
+                            <span>Need visa sponsorship</span>
+                        </label>
+                    </div>
+                `,
+                'us': `
+                    <div class="form-group">
+                        <label>State *</label>
+                        <select id="usState">
+                            <option value="de">Delaware</option>
+                            <option value="wy">Wyoming</option>
+                            <option value="fl">Florida</option>
+                            <option value="tx">Texas</option>
+                            <option value="nv">Nevada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Registered Agent</label>
+                        <input type="text" id="registeredAgent" placeholder="Agent name (optional)">
+                    </div>
+                `
+            };
+            
+            countryField.innerHTML = fieldHTML[country] || fieldHTML['uk'];
+            
+            // Update virtual address label and pricing
             const vaCheckbox = document.getElementById('useVirtualAddress');
             if (vaCheckbox) {
                 const vaLabel = vaCheckbox.parentElement;
-                if (country === 'uk') {
-                    vaLabel.innerHTML = '<input type="checkbox" id="useVirtualAddress" style="width:18px;height:18px;"><span>Use virtual office address (+£50)</span>';
-                } else {
-                    vaLabel.innerHTML = '<input type="checkbox" id="useVirtualAddress" style="width:18px;height:18px;"><span>Use virtual office address (+$50)</span>';
-                }
+                const currency = country === 'uk' ? '£' : '$';
+                const price = country === 'uk' ? '£50' : '$50';
+                vaLabel.innerHTML = `<input type="checkbox" id="useVirtualAddress" style="width:18px;height:18px;"><span>Use virtual office address (+${price})</span>`;
             }
             
             // Update summary
             const summaryVirtual = document.getElementById('summaryVirtual');
             const summaryTotal = document.getElementById('summaryTotal');
+            const summaryCountry = document.getElementById('summaryCountry');
+            const docRequirements = document.getElementById('docRequirements');
+            
             if (summaryVirtual && summaryTotal) {
                 summaryVirtual.textContent = 'No';
-                const prices = {'uk': '£', 'sg': '$', 'hk': '$', 'ae': '$', 'us': '$'};
-                const price = prices[country] || '$';
-                summaryTotal.textContent = country === 'uk' ? '£149' : price + '400';
+                const prices = {'uk': '£149', 'sg': '$400', 'hk': '$300', 'ae': '$600', 'us': '$250'};
+                summaryTotal.textContent = prices[country] || '$300';
+            }
+            
+            if (summaryCountry) {
+                const names = {'uk': 'UK', 'sg': 'Singapore', 'hk': 'Hong Kong', 'ae': 'UAE', 'us': 'USA'};
+                summaryCountry.textContent = names[country] || country.toUpperCase();
+            }
+            
+            // Update document requirements
+            if (docRequirements) {
+                const docs = {
+                    'uk': '• Valid passport<br>• Proof of address (utility bill)',
+                    'sg': '• Singapore IC / Valid passport<br>• Proof of address<br>• Business profile',
+                    'hk': '• Hong Kong ID card / Valid passport<br>• Proof of address',
+                    'ae': '• Valid passport<br>• Emirates ID (if resident)<br>• Visa copy (if applicable)',
+                    'us': '• Valid passport<br>• SSN or ITIN (if applicable)<br>• State ID'
+                };
+                docRequirements.innerHTML = docs[country] || docs['uk'];
             }
         }
         
