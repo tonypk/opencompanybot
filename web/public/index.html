@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCompanyBot - AI-Powered UK Company Registration</title>
-    <meta name="description" content="AI-powered company registration API with MCP support. Register UK companies instantly via API.">
+    <title>OpenCompanyBot - AI-Powered Company Registration</title>
+    <meta name="description" content="Register companies in UK, Singapore, HK, UAE, USA with AI assistance. Secure USDT payments.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0a;
-            --bg-secondary: #141414;
-            --text: #ffffff;
-            --text-secondary: #a1a1a1;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --border: #262626;
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #DBEAFE;
+            --accent: #10B981;
+            --accent-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --bg: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --text: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+            --border-hover: #CBD5E1;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
         * {
@@ -26,11 +42,14 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
         }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: inherit; }
 
         .container {
             max-width: 1200px;
@@ -38,13 +57,13 @@
             padding: 0 24px;
         }
 
+        /* Header */
         header {
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
             z-index: 100;
         }
 
@@ -52,272 +71,245 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 72px;
         }
 
         .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text);
-            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text);
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            color: white;
+            font-size: 18px;
         }
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--text);
-        }
-
-        .lang-switch {
+        .country-nav {
             display: flex;
             gap: 8px;
         }
 
-        .lang-switch a {
-            color: var(--text-secondary);
-            text-decoration: none;
+        .country-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
             font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
+            font-weight: 500;
+            color: var(--text-secondary);
             transition: all 0.2s;
         }
 
-        .lang-switch a.active {
-            background: var(--bg-secondary);
-            color: var(--text);
+        .country-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
-        .btn-login {
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text);
-            font-size: 14px;
-            cursor: pointer;
+        .country-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
         }
 
-        .btn-login:hover {
-            background: var(--border);
-        }
-
-        .user-menu {
+        .header-actions {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .user-email {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .tab {
-            padding: 8px 16px;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 16px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-        }
-
-        .tab.active {
-            color: var(--text);
-            border-color: var(--accent);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .orders-section {
-            padding: 40px 0;
-        }
-
-        .order-card {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .order-id {
-            font-weight: 600;
-        }
-
-        .order-status {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .order-status.pending {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-        }
-
-        .order-status.completed {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-        }
-
-        .hero {
-            padding: 120px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent), #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-size: 14px;
             font-weight: 500;
-            text-decoration: none;
             transition: all 0.2s;
-            cursor: pointer;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
             border: none;
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:disabled {
-            background: var(--accent);
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .btn-ghost:hover {
+            color: var(--text);
         }
 
         .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text);
+            background: var(--bg);
+            color: var(--primary);
             border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background: var(--border);
+            border-color: var(--primary);
+            background: var(--primary-light);
         }
 
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-menu {
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-menu.show { display: flex; }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg) 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 64px;
+        }
+
+        .hero-btns .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+        }
+
+        /* Countries Grid */
+        .countries {
+            padding: 40px 0;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .country-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .country-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .country-card.available {
+            border-color: var(--accent);
+        }
+
+        .country-flag {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .country-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .country-price {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .country-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .country-status.available {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .country-status.soon {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        /* Features */
         .features {
             padding: 80px 0;
             background: var(--bg-secondary);
@@ -325,33 +317,33 @@
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 24px;
-            margin-top: 48px;
         }
 
         .feature-card {
             background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: var(--radius-lg);
             padding: 32px;
-            transition: border-color 0.2s;
+            text-align: center;
+            transition: all 0.3s;
         }
 
         .feature-card:hover {
-            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
 
         .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 10px;
+            width: 64px;
+            height: 64px;
+            background: var(--primary-light);
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            margin-bottom: 16px;
+            margin: 0 auto 16px;
+            font-size: 28px;
         }
 
         .feature-card h3 {
@@ -365,496 +357,777 @@
             font-size: 14px;
         }
 
-        .api-preview {
+        /* Pricing */
+        .pricing {
             padding: 80px 0;
         }
 
-        .code-block {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            margin-top: 32px;
-            overflow-x: auto;
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .code-block pre {
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--text-secondary);
-        }
-
-        .code-block .keyword {
-            color: #c792ea;
-        }
-
-        .code-block .string {
-            color: #c3e88d;
-        }
-
-        .code-block .comment {
-            color: #546e7a;
-        }
-
-        footer {
-            padding: 40px 0;
-            border-top: 1px solid var(--border);
+        .pricing-card {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 32px;
             text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg) 30%);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .pricing-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .pricing-price span {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .pricing-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: var(--text-secondary);
             font-size: 14px;
         }
 
-        .form-group input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 48px 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 24px;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            border-radius: var(--radius-xl);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: var(--radius);
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+            background: var(--bg-secondary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-        .form-group select,
-        .form-group textarea {
             width: 100%;
             padding: 12px 16px;
-            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius);
+            font-size: 15px;
+            transition: all 0.2s;
+            background: var(--bg);
             color: var(--text);
-            font-size: 14px;
-            font-family: inherit;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--accent);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        .form-group label {
-            display: block;
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-error {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* Steps */
+        .steps {
+            margin-bottom: 24px;
+        }
+
+        .step-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 14px;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+        .step {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            transition: background 0.3s;
         }
 
-        .form-section {
-            margin-bottom: 32px;
+        .step.active {
+            background: var(--primary);
         }
 
-        .form-section h3 {
-            font-size: 16px;
-            font-weight: 600;
+        .step.completed {
+            background: var(--accent);
+        }
+
+        .step-label {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
             margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border);
         }
 
+        .step-label span {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+        }
+
+        .step-label span.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Alert */
         .alert {
-            padding: 16px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: var(--radius);
             margin-bottom: 16px;
             font-size: 14px;
         }
 
         .alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid #22c55e;
-            color: #22c55e;
+            background: var(--accent-light);
+            color: #065F46;
         }
 
         .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            color: #ef4444;
+            background: var(--error-light);
+            color: #991B1B;
         }
 
         .alert-loading {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid var(--accent);
-            color: var(--accent);
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--accent);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
+        /* Orders */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+        .order-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
         }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .order-status.pending {
+            background: var(--warning-light);
+            color: #B45309;
+        }
+
+        .order-status.processing {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .order-status.completed {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .hero-btns { flex-direction: column; }
+            .country-nav { display: none; }
+            .header-actions .btn-ghost { display: none; }
+            .features-grid, .pricing-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Hide elements */
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="container">
-            <a href="/en" class="logo">
-                <div class="logo-icon">🤖</div>
+            <a href="/" class="logo">
+                <div class="logo-icon">🏢</div>
                 OpenCompanyBot
             </a>
-            <nav>
-                <a href="#features">Features</a>
-                <a href="#register">Register</a>
-                <a href="#api">API</a>
-                <a href="#pricing">Pricing</a>
-                <div class="user-menu" id="userMenu">
-                    <button class="btn-login" onclick="openModal('login')">Login</button>
-                </div>
-                <div class="lang-switch">
-                    <a href="/" class="active">EN</a>
-                    <a href="/zh">中文</a>
-                </div>
+            
+            <nav class="country-nav">
+                <button class="country-btn active" data-country="uk">🇬🇧 UK</button>
+                <button class="country-btn" data-country="sg">🇸🇬 SG</button>
+                <button class="country-btn" data-country="hk">🇭🇰 HK</button>
+                <button class="country-btn" data-country="ae">🇦🇪 UAE</button>
+                <button class="country-btn" data-country="us">🇺🇸 USA</button>
             </nav>
+            
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="openAuthModal()">Log in</button>
+                <button class="btn btn-primary" onclick="openAuthModal('register')">Get Started</button>
+                <div class="user-menu" id="userMenu">
+                    <div class="user-avatar" id="userAvatar">J</div>
+                    <button class="btn btn-ghost" onclick="showDashboard()">My Orders</button>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </div>
         </div>
     </header>
 
+    <!-- Hero -->
     <section class="hero">
         <div class="container">
-            <h1>AI-Powered<br><span>UK Company Registration</span></h1>
-            <p>Register UK companies instantly via API. MCP-ready for AI agents. Accept USDT payments globally.</p>
-            <div class="cta-group">
-                <a href="#api" class="btn btn-primary">Get API Key</a>
-                <a href="#docs" class="btn btn-secondary">View Docs</a>
+            <h1>AI-Powered<br><span>Company Registration</span></h1>
+            <p>Register companies in multiple countries with AI assistance. Secure USDT payments, instant processing, and full support.</p>
+            <div class="hero-btns">
+                <button class="btn btn-primary" onclick="startRegistration()">Start Registration</button>
+                <button class="btn btn-secondary" onclick="scrollToFeatures()">Learn More</button>
             </div>
         </div>
     </section>
 
+    <!-- Countries -->
+    <section class="countries">
+        <div class="container">
+            <h2 class="section-title">Choose Your Country</h2>
+            <p class="section-subtitle">We support company registration in these countries</p>
+            
+            <div class="countries-grid">
+                <div class="country-card available" onclick="selectCountry('uk')">
+                    <div class="country-flag">🇬🇧</div>
+                    <div class="country-name">United Kingdom</div>
+                    <div class="country-price">From £50 + £50 CH</div>
+                    <span class="country-status available">✓ Available</span>
+                </div>
+                <div class="country-card" onclick="showComingSoon()">
+                    <div class="country-flag">🇸🇬</div>
+                    <div class="country-name">Singapore</div>
+                    <div class="country-price">From $300</div>
+                    <span class="country-status soon">Coming Soon</span>
+                </div>
+                <div class="country-card" onclick="showComingSoon()">
+                    <div class="country-flag">🇭🇰</div>
+                    <div class="country-name">Hong Kong</div>
+                    <div class="country-price">From $200</div>
+                    <span class="country-status soon">Coming Soon</span>
+                </div>
+                <div class="country-card" onclick="showComingSoon()">
+                    <div class="country-flag">🇦🇪</div>
+                    <div class="country-name">UAE</div>
+                    <div class="country-price">From $500</div>
+                    <span class="country-status soon">Coming Soon</span>
+                </div>
+                <div class="country-card" onclick="showComingSoon()">
+                    <div class="country-flag">🇺🇸</div>
+                    <div class="country-name">USA</div>
+                    <div class="country-price">From $150</div>
+                    <span class="country-status soon">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
     <section class="features" id="features">
         <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700;">Why OpenCompanyBot?</h2>
+            <h2 class="section-title">Why Choose Us</h2>
+            <p class="section-subtitle">Everything you need for company registration</p>
+            
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3>Instant Registration</h3>
-                    <p>Direct integration with UK Companies House API. Company incorporation in minutes, not days.</p>
+                    <h3>Fast Processing</h3>
+                    <p>Company registration completed within 3-5 business days</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
-                    <h3>MCP-Ready</h3>
-                    <p>Built for AI agents. Full MCP protocol support for automated company registration workflows.</p>
+                    <h3>AI Assistance</h3>
+                    <p>Smart guidance throughout the registration process</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">₿</div>
+                    <div class="feature-icon">💳</div>
                     <h3>USDT Payments</h3>
-                    <p>Accept USDT (ERC20/TRC20) from anywhere in the world. No banking headaches.</p>
+                    <p>Secure cryptocurrency payments with instant confirmation</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Global API</h3>
-                    <p>RESTful API with full documentation. Deploy on Cloudflare Edge for global low-latency.</p>
+                    <div class="feature-icon">🌍</div>
+                    <h3>Multi-Country</h3>
+                    <p>Register companies in UK, SG, HK, UAE, USA and more</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Virtual Address</h3>
+                    <p>Professional registered office address available</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Compliant</h3>
+                    <p>Full compliance with local regulations and data protection</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="api-preview" id="api">
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
         <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px;">Simple API</h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px;">Register a UK company with just a few lines of code</p>
-            <div class="code-block">
-<pre><span class="keyword">curl</span> -X POST <span class="string">"https://api.opencompanybot.com/api/v1/companies/incorporate"</span> \
-  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
-  -H <span class="string">"Content-Type: application/json"</span> \
-  -d <span class="string">'{
-    "company_name": "Acme Ltd",
-    "company_type": "private-limited",
-    "directors": [...],
-    "shareholders": [...]
-  }'</span></pre>
-            </div>
-        </div>
-    </section>
-
-    <section class="features" id="pricing">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 48px;">Simple Pricing</h2>
-            <div class="features-grid" style="max-width: 900px; margin: 0 auto;">
-                <div class="feature-card" style="text-align: center;">
-                    <h3>Developer</h3>
-                    <p style="font-size: 32px; font-weight: 700; margin: 16px 0;">$29<span style="font-size: 16px; color: var(--text-secondary);">/mo</span></p>
-                    <p>100 company registrations/month</p>
-                    <p>USDT payments</p>
-                    <p>MCP tools access</p>
-                    <a href="#" class="btn btn-primary" style="margin-top: 24px; width: 100%;">Get Started</a>
-                </div>
-                <div class="feature-card" style="text-align: center; border-color: var(--accent);">
-                    <h3>Business</h3>
-                    <p style="font-size: 32px; font-weight: 700; margin: 16px 0;">$99<span style="font-size: 16px; color: var(--text-secondary);">/mo</span></p>
-                    <p>Unlimited registrations</p>
-                    <p>Priority support</p>
-                    <p>Custom integrations</p>
-                    <a href="#" class="btn btn-primary" style="margin-top: 24px; width: 100%;">Get Started</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="api-preview" id="register">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px;">Register Your UK Company</h2>
-            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px;">Fill in the details below to register your UK company instantly</p>
+            <h2 class="section-title">Simple Pricing</h2>
+            <p class="section-subtitle">Choose the package that fits your needs</p>
             
-            <form id="companyForm" style="max-width: 700px; margin: 0 auto;">
-                <div class="form-section">
-                    <h3>Company Details</h3>
-                    <div class="form-group">
-                        <label>Company Name *</label>
-                        <input type="text" name="company_name" required placeholder="e.g., Acme Ltd">
-                    </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Standard</div>
+                    <div class="pricing-price">£50 <span>+ £50 CH fee</span></div>
+                    <div class="pricing-desc">Perfect for basic company registration</div>
+                    <ul class="pricing-features">
+                        <li>Company registration</li>
+                        <li>Standard registered address</li>
+                        <li>Digital documents</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="selectPackage('standard')">Select</button>
                 </div>
-
-                <div class="form-section">
-                    <h3>Registered Office Address (UK)</h3>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="useVirtualAddress" onchange="toggleVirtualAddress()"> 
-                            Use Virtual Office Address (+£50/year)
-                        </label>
-                    </div>
-                    
-                    <div id="virtualAddressFields" style="display:none;">
-                        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
-                            We'll provide a prestigious UK business address in Central London. Includes:
-                            <br>• Mail handling & forwarding
-                            <br>• Registered office address for Companies House
-                            <br>• Director service address
-                        </p>
-                    </div>
-                    
-                    <div id="manualAddressFields">
-                        <div class="form-group">
-                            <label>Address Line 1 *</label>
-                            <input type="text" name="address_line_1" id="address_line_1" placeholder="e.g., 123 High Street">
-                        </div>
-                    <div class="form-group">
-                        <label>Address Line 2</label>
-                        <input type="text" name="address_line_2" placeholder="e.g., Suite 4">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>City *</label>
-                            <input type="text" name="locality" required placeholder="e.g., London">
-                        </div>
-                        <div class="form-group">
-                            <label>County</label>
-                            <input type="text" name="region" placeholder="e.g., Greater London">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Postcode *</label>
-                            <input type="text" name="postal_code" required placeholder="e.g., SW1A 1AA">
-                        </div>
-                        <div class="form-group">
-                            <label>Country</label>
-                            <select name="country">
-                                <option value="United Kingdom" selected>United Kingdom</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-name">Premium</div>
+                    <div class="pricing-price">£99 <span>+ £50 CH fee</span></div>
+                    <div class="pricing-desc">Best value with all extras included</div>
+                    <ul class="pricing-features">
+                        <li>Company registration</li>
+                        <li>Virtual office address</li>
+                        <li>Priority processing</li>
+                        <li>First year registered office</li>
+                        <li>Document courier</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="selectPackage('premium')">Select</button>
                 </div>
-
-                <div class="form-section">
-                    <h3>Director Details</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" name="director_name" required placeholder="e.g., John Smith">
-                        </div>
-                        <div class="form-group">
-                            <label>Date of Birth *</label>
-                            <input type="date" name="director_dob" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Nationality *</label>
-                            <input type="text" name="director_nationality" required placeholder="e.g., British">
-                        </div>
-                        <div class="form-group">
-                            <label>Occupation *</label>
-                            <input type="text" name="director_occupation" required placeholder="e.g., Director">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Shareholder Details</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Shareholder Name *</label>
-                            <input type="text" name="shareholder_name" required placeholder="e.g., John Smith">
-                        </div>
-                        <div class="form-group">
-                            <label>Shares *</label>
-                            <input type="number" name="shares" required value="100" min="1">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>SIC Code</h3>
-                    <div class="form-group">
-                        <label>Primary Business Activity *</label>
-                        <select name="sic_code" required>
-                            <option value="">Select industry...</option>
-                            <option value="62012">62012 - Business and domestic software development</option>
-                            <option value="62020">62020 - Information technology consultancy activities</option>
-                            <option value="62011">62011 - Ready-made interactive leisure and entertainment software development</option>
-                            <option value="63110">63110 - Web portals</option>
-                            <option value="70221">70221 - Financial management</option>
-                            <option value="82990">82990 - Other business support service activities</option>
-                            <option value="74909">74909 - Other professional, scientific and technical activities</option>
-                            <option value="47910">47910 - Retail sale via mail order houses or via Internet</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div id="formAlert"></div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Register Company</button>
-            </form>
+            </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>© 2026 OpenCompanyBot. Built for the global startup community.</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#features">Features</a>
+                    <a href="#">API Docs</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Careers</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Status</a>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 OpenCompanyBot. All rights reserved.
+            </div>
         </div>
     </footer>
 
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Account</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="login" onclick="showTab('login')">Log in</button>
+                    <button class="tab-btn" data-tab="register" onclick="showTab('register')">Register</button>
+                    <button class="tab-btn" data-tab="orders" onclick="showTab('orders')">My Orders</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" required placeholder="••••••••">
+                        </div>
+                        <div id="loginError" class="form-error"></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Log in</button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="regEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="regPassword" required placeholder="At least 6 characters" minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Name (Optional)</label>
+                            <input type="text" id="regName" placeholder="Your name">
+                        </div>
+                        <div id="regError" class="form-error"></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                    </form>
+                </div>
+
+                <!-- Orders -->
+                <div id="ordersContent" class="hidden">
+                    <div class="orders-list" id="ordersList">
+                        <p style="color: var(--text-secondary);">Loading orders...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function toggleVirtualAddress() {
-            const useVirtual = document.getElementById('useVirtualAddress').checked;
-            document.getElementById('virtualAddressFields').style.display = useVirtual ? 'block' : 'none';
-            document.getElementById('manualAddressFields').style.display = useVirtual ? 'none' : 'block';
-            
-            if (useVirtual) {
-                document.getElementById('address_line_1').removeAttribute('required');
-            } else {
-                document.getElementById('address_line_1').setAttribute('required', 'required');
-            }
-        }
-
-        document.getElementById('companyForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const alertEl = document.getElementById('formAlert');
-            const submitBtn = this.querySelector('button[type="submit"]');
-            
-            alertEl.innerHTML = '<div class="alert alert-loading"><span class="spinner"></span>Submitting your company registration...</div>';
-            submitBtn.disabled = true;
-            
-            const formData = new FormData(this);
-            const useVirtualAddress = document.getElementById('useVirtualAddress').checked;
-            
-            let addressData = {};
-            if (useVirtualAddress) {
-                addressData = {
-                    address_line_1: "Virtual Office Address",
-                    address_line_2: "Suite 123",
-                    locality: "London",
-                    region: "Greater London",
-                    postal_code: "SW1Y 4RD",
-                    country: "United Kingdom"
-                };
-            } else {
-                addressData = {
-                    address_line_1: formData.get('address_line_1'),
-                    address_line_2: formData.get('address_line_2'),
-                    locality: formData.get('locality'),
-                    region: formData.get('region'),
-                    postal_code: formData.get('postal_code'),
-                    country: formData.get('country')
-                };
-            }
-            
-            const data = {
-                company_name: formData.get('company_name'),
-                company_type: 'ltd',
-                use_virtual_address: useVirtualAddress,
-                registered_office_address: addressData,
-                directors: [{
-                    name: formData.get('director_name'),
-                    date_of_birth: formData.get('director_dob'),
-                    nationality: formData.get('director_nationality'),
-                    occupation: formData.get('director_occupation')
-                }],
-                shareholders: [{
-                    name: formData.get('shareholder_name'),
-                    shares: parseInt(formData.get('shares')),
-                    share_type: 'ordinary'
-                }],
-                sic_codes: [formData.get('sic_code')]
-            };
-
-            const token = localStorage.getItem('token');
-            
-            if (!token) {
-                alertEl.innerHTML = '<div class="alert alert-error">Please login first to register a company</div>';
-                submitBtn.disabled = false;
-                return;
-            }
-            
-            try {
-                const response = await fetch(API_BASE + '/api/v1/companies/incorporate', {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    alertEl.innerHTML = '<div class="alert alert-success">' +
-                        '<strong>Company registered successfully!</strong><br>' +
-                        'Company Name: ' + result.company_name + '<br>' +
-                        'Incorporation ID: ' + result.incorporation_id + '<br>' +
-                        'Status: ' + result.status + '<br>' +
-                        'Processing Time: ' + result.estimated_processing_time + 
-                        '</div>';
-                    this.reset();
-                } else {
-                    alertEl.innerHTML = '<div class="alert alert-error">Error: ' + (result.detail || result.message || 'Registration failed. Please try again.') + '</div>';
-                }
-            } catch (error) {
-                console.error('Form submission error:', error);
-                alertEl.innerHTML = '<div class="alert alert-error">Network error. Please try again later. Error: ' + error.message + '</div>';
-            } finally {
-                submitBtn.disabled = false;
-            }
-        });
-
-        // Auth API Modal
+        // API Base
         const API_BASE = 'https://opencompanybot.com';
         
-        function openModal(tab) {
+        // State
+        let currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        let selectedCountry = 'uk';
+        let selectedPackage = 'premium';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserMenu();
+            setupCountryButtons();
+        });
+        
+        function updateUserMenu() {
+            const guestMenu = document.querySelector('.header-actions .btn-ghost, .header-actions .btn-primary');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (currentUser && currentUser.token) {
+                document.querySelector('.header-actions .btn-ghost').classList.add('hidden');
+                document.querySelector('.header-actions .btn-primary').classList.add('hidden');
+                userMenu.classList.add('show');
+                
+                const initial = currentUser.email ? currentUser.email[0].toUpperCase() : 'U';
+                document.getElementById('userAvatar').textContent = initial;
+            } else {
+                document.querySelector('.header-actions .btn-ghost').classList.remove('hidden');
+                document.querySelector('.header-actions .btn-primary').classList.remove('hidden');
+                userMenu.classList.remove('show');
+            }
+        }
+        
+        function setupCountryButtons() {
+            document.querySelectorAll('.country-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const country = btn.dataset.country;
+                    if (country === 'uk') {
+                        document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        selectedCountry = 'uk';
+                    } else {
+                        showComingSoon();
+                    }
+                });
+            });
+        }
+        
+        function showComingSoon() {
+            alert('Coming soon! This country will be available soon.');
+        }
+        
+        function selectCountry(country) {
+            if (country !== 'uk') {
+                showComingSoon();
+                return;
+            }
+            selectedCountry = country;
+            startRegistration();
+        }
+        
+        function selectPackage(pkg) {
+            selectedPackage = pkg;
+            startRegistration();
+        }
+        
+        function startRegistration() {
+            if (!currentUser || !currentUser.token) {
+                openAuthModal('register');
+                return;
+            }
+            alert('Registration form coming soon!\n\nPackage: ' + selectedPackage + '\nCountry: ' + selectedCountry.toUpperCase());
+        }
+        
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Modal Functions
+        function openAuthModal(tab = 'login') {
             document.getElementById('authModal').classList.add('active');
             showTab(tab);
         }
@@ -864,16 +1137,52 @@
         }
         
         function showTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            if (tab === 'login') {
-                document.getElementById('loginForm').classList.add('active');
-            } else if (tab === 'register') {
-                document.getElementById('registerForm').classList.add('active');
-            } else if (tab === 'orders') {
-                document.getElementById('ordersContent').classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+            
+            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+            document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+            document.getElementById('ordersContent').classList.toggle('hidden', tab !== 'orders');
+            
+            if (tab === 'orders') {
                 loadOrders();
+            }
+        }
+        
+        function showDashboard() {
+            openAuthModal('orders');
+        }
+        
+        // Auth Functions
+        async function handleRegister(e) {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const name = document.getElementById('regName').value;
+            const errorEl = document.getElementById('regError');
+            
+            errorEl.textContent = '';
+            
+            try {
+                const res = await fetch(API_BASE + '/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, name })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    currentUser = { email, token: data.token, name: data.user?.name };
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    updateUserMenu();
+                    closeModal();
+                } else {
+                    errorEl.textContent = data.error || 'Registration failed';
+                }
+            } catch (err) {
+                errorEl.textContent = 'Network error: ' + err.message;
             }
         }
         
@@ -881,169 +1190,73 @@
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+            
+            errorEl.textContent = '';
             
             try {
                 const res = await fetch(API_BASE + '/api/v1/auth/login', {
                     method: 'POST',
-                    mode: 'cors',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({email, password})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
                 });
+                
                 const data = await res.json();
                 
                 if (res.ok) {
-                    currentUser = data.user;
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
+                    currentUser = { email, token: data.token, name: data.user?.name };
+                    localStorage.setItem('user', JSON.stringify(currentUser));
                     updateUserMenu();
                     closeModal();
-                    loadOrders();
                 } else {
-                    document.getElementById('loginError').textContent = data.error || 'Login failed';
+                    errorEl.textContent = data.error || 'Login failed';
                 }
             } catch (err) {
-                console.error('Login error:', err);
-                document.getElementById('loginError').textContent = 'Network error: ' + err.message;
-            }
-        }
-        
-        async function handleRegister(e) {
-            e.preventDefault();
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const name = document.getElementById('regName').value;
-            
-            try {
-                const res = await fetch(API_BASE + '/api/v1/auth/register', {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({email, password, name})
-                });
-                const data = await res.json();
-                
-                if (res.ok) {
-                    currentUser = data.user;
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    updateUserMenu();
-                    closeModal();
-                    loadOrders();
-                } else {
-                    document.getElementById('regError').textContent = data.error || 'Registration failed';
-                }
-            } catch (err) {
-                console.error('Registration error:', err);
-                document.getElementById('regError').textContent = 'Network error: ' + err.message;
+                errorEl.textContent = 'Network error: ' + err.message;
             }
         }
         
         function logout() {
             currentUser = null;
-            localStorage.removeItem('token');
             localStorage.removeItem('user');
+            localStorage.removeItem('token');
             updateUserMenu();
-            document.getElementById('ordersList').innerHTML = '';
-        }
-        
-        function updateUserMenu() {
-            const menu = document.getElementById('userMenu');
-            if (currentUser) {
-                menu.innerHTML = '<span class="user-email">' + currentUser.email + '</span><button class="btn-login" onclick="showOrders()">My Orders</button><button class="btn-login" onclick="logout()">Logout</button>';
-            } else {
-                menu.innerHTML = '<button class="btn-login" onclick="openModal(\'login\')">Login</button>';
-            }
         }
         
         async function loadOrders() {
-            const token = localStorage.getItem('token');
-            if (!token) return;
+            const list = document.getElementById('ordersList');
+            
+            if (!currentUser || !currentUser.token) {
+                list.innerHTML = '<p style="color: var(--text-secondary);">Please log in to view orders</p>';
+                return;
+            }
             
             try {
                 const res = await fetch(API_BASE + '/api/v1/orders', {
-                    headers: {'Authorization': 'Bearer ' + token}
+                    headers: { 'Authorization': 'Bearer ' + currentUser.token }
                 });
-                if (res.ok) {
-                    const data = await res.json();
-                    displayOrders(data.orders);
+                const data = await res.json();
+                
+                if (res.ok && data.orders && data.orders.length > 0) {
+                    list.innerHTML = data.orders.map(o => `
+                        <div class="order-card">
+                            <div class="order-header">
+                                <span class="order-id">${o.id}</span>
+                                <span class="order-status ${o.status}">${o.status}</span>
+                            </div>
+                            <div class="order-info">
+                                <span>Company: ${o.company_name || 'N/A'}</span>
+                                <span>Amount: £${o.amount || 0}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<p style="color: var(--text-secondary);">No orders yet. Start a new registration!</p>';
                 }
             } catch (err) {
-                console.error('Failed to load orders');
+                list.innerHTML = '<p style="color: var(--error);">Failed to load orders</p>';
             }
         }
-        
-        function displayOrders(orders) {
-            const list = document.getElementById('ordersList');
-            if (!orders || orders.length === 0) {
-                list.innerHTML = '<p style="color: var(--text-secondary);">No orders yet.</p>';
-                return;
-            }
-            list.innerHTML = orders.map(o => '<div class="order-card"><div class="order-header"><span class="order-id">' + o.id + '</span><span class="order-status ' + o.status + '">' + o.status + '</span></div><div>' + o.company_name + '</div><div>£' + o.amount + '</div></div>').join('');
-        }
-        
-        function showOrders() {
-            document.getElementById('authModal').classList.add('active');
-            showTab('orders');
-        }
-        
-        // Initialize
-        updateUserMenu();
     </script>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Account</h3>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            
-            <div class="tabs">
-                <button class="tab active" data-tab="login" onclick="showTab('login')">Login</button>
-                <button class="tab" data-tab="register" onclick="showTab('register')">Register</button>
-                <button class="tab" data-tab="orders" onclick="showTab('orders')">My Orders</button>
-            </div>
-            
-            <div id="loginForm" class="tab-content active">
-                <form onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="loginPassword" required>
-                    </div>
-                    <div id="loginError" style="color: #ef4444; margin-bottom: 16px; font-size: 14px;"></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
-                </form>
-            </div>
-            
-            <div id="registerForm" class="tab-content">
-                <form onsubmit="handleRegister(event)">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" id="regName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="regEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="regPassword" required>
-                    </div>
-                    <div id="regError" style="color: #ef4444; margin-bottom: 16px; font-size: 14px;"></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
-                </form>
-            </div>
-            
-            <div id="ordersContent" class="tab-content">
-                <div id="ordersList">
-                    <p style="color: var(--text-secondary);">Loading orders...</p>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
