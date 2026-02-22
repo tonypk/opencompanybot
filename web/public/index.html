@@ -787,12 +787,21 @@
                 sic_codes: [formData.get('sic_code')]
             };
 
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                alertEl.innerHTML = '<div class="alert alert-error">Please login first to register a company</div>';
+                submitBtn.disabled = false;
+                return;
+            }
+            
             try {
                 const response = await fetch(API_BASE + '/api/v1/companies/incorporate', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(data)
                 });
@@ -800,7 +809,13 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    alertEl.innerHTML = '<div class="alert alert-success">Company registered successfully! Company Number: ' + (result.company_number || 'Pending') + '</div>';
+                    alertEl.innerHTML = '<div class="alert alert-success">' +
+                        '<strong>Company registered successfully!</strong><br>' +
+                        'Company Name: ' + result.company_name + '<br>' +
+                        'Incorporation ID: ' + result.incorporation_id + '<br>' +
+                        'Status: ' + result.status + '<br>' +
+                        'Processing Time: ' + result.estimated_processing_time + 
+                        '</div>';
                     this.reset();
                 } else {
                     alertEl.innerHTML = '<div class="alert alert-error">Error: ' + (result.detail || result.message || 'Registration failed. Please try again.') + '</div>';
