@@ -1,0 +1,15 @@
+name = "opencompanybot"
+compatibility_date = "2026-02-11"
+compatibility_flags = ["python_workers"]
+
+[env.production]
+name = "opencompanybot-prod"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "opencompanybot"
+database_id = "replace-me"
+
+[[kv_namespaces]]
+binding = "PAYMENTS"
+id = "replace-me"

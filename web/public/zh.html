@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCompanyBot - AI驱动英国公司注册</title>
+    <meta name="description" content="AI驱动的公司注册API，支持MCP协议。通过API即时注册英国公司。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-secondary: #141414;
+            --text: #ffffff;
+            --text-secondary: #a1a1a1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #262626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-switch a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .lang-switch a.active {
+            background: var(--bg-secondary);
+            color: var(--text);
+        }
+
+        .hero {
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent), #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .features {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .feature-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .api-preview {
+            padding: 80px 0;
+        }
+
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 32px;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .code-block .keyword {
+            color: #c792ea;
+        }
+
+        .code-block .string {
+            color: #c3e88d;
+        }
+
+        .code-block .comment {
+            color: #546e7a;
+        }
+
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            .hero p {
+                font-size: 16px;
+            }
+            nav {
+                gap: 16px;
+            }
+            .cta-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/zh" class="logo">
+                <div class="logo-icon">🤖</div>
+                OpenCompanyBot
+            </a>
+            <nav>
+                <a href="#features">功能</a>
+                <a href="#api">API</a>
+                <a href="#pricing">价格</a>
+                <div class="lang-switch">
+                    <a href="/en">EN</a>
+                    <a href="/zh" class="active">中文</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>AI驱动的<br><span>英国公司注册</span></h1>
+            <p>通过API即时注册英国公司。MCP协议支持AI代理自动化。全球接受USDT支付。</p>
+            <div class="cta-group">
+                <a href="#api" class="btn btn-primary">获取API密钥</a>
+                <a href="#docs" class="btn btn-secondary">查看文档</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 36px; font-weight: 700;">为什么选择我们？</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>即时注册</h3>
+                    <p>直连英国Companies House API。公司注册仅需几分钟，而非几天。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>MCP协议支持</h3>
+                    <p>专为AI代理设计。完整的MCP协议支持，实现自动化公司注册工作流。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">₿</div>
+                    <h3>USDT支付</h3>
+                    <p>支持USDT (ERC20/TRC20) 全球收款。无需繁琐的银行流程。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>全球API</h3>
+                    <p>RESTful API配合完整文档。部署在Cloudflare Edge，享受全球低延迟。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="api-preview" id="api">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px;">简洁API</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 32px;">仅需几行代码即可注册英国公司</p>
+            <div class="code-block">
+<pre><span class="keyword">curl</span> -X POST <span class="string">"https://api.opencompanybot.com/api/v1/companies/incorporate"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{
+    "company_name": "Acme Ltd",
+    "company_type": "private-limited",
+    "directors": [...],
+    "shareholders": [...]
+  }'</span></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="pricing">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 48px;">透明定价</h2>
+            <div class="features-grid" style="max-width: 900px; margin: 0 auto;">
+                <div class="feature-card" style="text-align: center;">
+                    <h3>开发者</h3>
+                    <p style="font-size: 32px; font-weight: 700; margin: 16px 0;">$29<span style="font-size: 16px; color: var(--text-secondary);">/月</span></p>
+                    <p>每月100次公司注册</p>
+                    <p>USDT支付</p>
+                    <p>MCP工具访问</p>
+                    <a href="#" class="btn btn-primary" style="margin-top: 24px; width: 100%;">立即开始</a>
+                </div>
+                <div class="feature-card" style="text-align: center; border-color: var(--accent);">
+                    <h3>商业版</h3>
+                    <p style="font-size: 32px; font-weight: 700; margin: 16px 0;">$99<span style="font-size: 16px; color: var(--text-secondary);">/月</span></p>
+                    <p>无限注册次数</p>
+                    <p>优先支持</p>
+                    <p>定制集成</p>
+                    <a href="#" class="btn btn-primary" style="margin-top: 24px; width: 100%;">立即开始</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 OpenCompanyBot。为全球创业社区而生。</p>
+        </div>
+    </footer>
+</body>
+</html>
