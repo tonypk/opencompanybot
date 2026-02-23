@@ -143,12 +143,12 @@ PROVIDERS = {
         "requirements": ["singpass", "business_reg"]  # local requirements
     },
     "hk": {
-        "name": "Hong Kong Company Services",
-        "api_endpoint": "https://api.hkcompanies.gov.hk/v1",  # placeholder
-        "type": "api",
+        "name": "Hong Kong Companies Registry (TPSI)",
+        "api_endpoint": "https://www.cr.gov.hk/efiling/service",
+        "type": "tpsi",  # TPSI - Trade Principal and Supporting Information
         "features": ["ltd", "company"],
         "virtual_address": True,
-        "requirements": ["hkid"]
+        "requirements": ["hkid", "passport"]
     },
     "ae": {
         "name": "UAE Free Zone Services",
@@ -678,6 +678,70 @@ class Default(WorkerEntrypoint):
                 "virtual_address": virtual,
                 **pricing
             })
+        
+        # ============ Hong Kong TPSI API ============
+        if path == "/api/v1/hk/tpsi/name-search" and request.method == "POST":
+            try:
+                body = await request.json()
+            except:
+                return error_response("Invalid JSON")
+            
+            company_name = body.get("company_name", "")
+            if not company_name:
+                return error_response("Company name is required")
+            
+            from app.services.hongkong_tpsi import HongKongTPSI
+            hk_tpsi = HongKongTPSI(test_mode=True)
+            result = hk_tpsi.search_company_name(company_name)
+            
+            return success_response(result)
+        
+        if path == "/api/v1/hk/tpsi/incorporate" and request.method == "POST":
+            try:
+                body = await request.json()
+            except:
+                return error_response("Invalid JSON")
+            
+            company_name = body.get("company_name", "")
+            if not company_name:
+                return error_response("Company name is required")
+            
+            from app.services.hongkong_tpsi import HongKongTPSI
+            hk_tpsi = HongKongTPSI(test_mode=True)
+            
+            # Build company data
+            company_data = {
+                "company_name": company_name,
+                "company_type": body.get("company_type", "limited"),
+                "registered_address": body.get("registered_address", {
+                    "room": "",
+                    "floor": "10",
+                    "block": "A",
+                    "building": "Business Centre",
+                    "street": "123 Queen's Road Central",
+                    "district": "Central"
+                }),
+                "directors": body.get("directors", [{"name": "Director", "nationality": "Hong Kong"}]),
+                "shareholders": body.get("shareholders", [{"name": "Shareholder", "shares": 100}]),
+                "secretary": body.get("secretary", {"name": "Corporate Secretary Ltd", "address": "Hong Kong"})
+            }
+            
+            result = hk_tpsi.incorporate_company(company_data)
+            
+            return success_response({
+                "status": "success",
+                "provider": "Hong Kong Companies Registry (TPSI)",
+                **result
+            })
+        
+        if path == "/api/v1/hk/tpsi/status" and request.method == "GET":
+            company_number = request.params.get("company_number", "")
+            
+            from app.services.hongkong_tpsi import HongKongTPSI
+            hk_tpsi = HongKongTPSI(test_mode=True)
+            result = hk_tpsi.get_company_details(company_number)
+            
+            return success_response(result)
         
         # ============ Payment API (CCPayment) ============
         if path == "/api/v1/payments/create" and request.method == "POST":
